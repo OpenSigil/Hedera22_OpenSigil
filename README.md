@@ -1,3 +1,16 @@
+## OpenSigil Development Notes
+
+### Sigil Example API Usage
+'''
+$ curl -X POST http://localhost:5000/api/users/register \
+  -H "Content-Type: application/json" \
+  -d'{"username":"test", "password":"test", "email":"test@email.com"}'
+'''
+'''
+curl -X POST http://localhost:5000/api/sigil/encrypt
+'''
+
+
 # [Django React Purity Dashboard](https://appseed.us/product/django-react-purity-dashboard)
 
 Start your Development with an Innovative Admin Template for **Chakra UI** and **React**. Purity UI Dashboard is built with over 70 frontend individual elements, like buttons, inputs, navbars, navtabs, cards or alerts, giving you the freedom of choosing and combining. The product comes with a simple JWT authentication flow: login/register/logout. 
