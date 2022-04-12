@@ -156,3 +156,8 @@ CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000"]
 
 TESTING = False
 TEST_RUNNER = "core.test_runner.CoreTestRunner"
+
+# Sigil Settings
+ENCRYPT_PRIVATE_KEY = os.environ.get("PRIVATE_KEY")
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
