@@ -1,14 +1,11 @@
 ## OpenSigil Development Notes
 
 ### Sigil Example API Usage
+Encrypt File
 ```
-$ curl -X POST http://localhost:5000/api/users/register \
-  -H "Content-Type: application/json" \
-  -d'{"username":"test", "password":"test", "email":"test@email.com"}'
+curl -X POST -F 'data=@{path_to_file}'  http://localhost:5000/api/sigil/encrypt
 ```
-```
-curl -X POST http://localhost:5000/api/sigil/encrypt
-```
+
 
 
 # [Django React Purity Dashboard](https://appseed.us/product/django-react-purity-dashboard)
