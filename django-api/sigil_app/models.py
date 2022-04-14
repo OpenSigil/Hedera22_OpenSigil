@@ -43,22 +43,18 @@ class Encrypt():
 
     def __write_file(self, input_file):
         destination = open('encryptedfile', 'wb')
-        for chunk in input_file.chunks():
-            destination.write(chunk)
-        destination.close()
+        destination.write(input_file)
         return(open("encryptedfile", "rb"))
 
     def encrypt_file(self, input_file):
         file_obj = self.__load_file(input_file)
-        print(f'FILE OBJ')
-        _encryption_pub_key = self._private_key * self._curve
-        print(f'pub key {_encryption_pub_key}')
+        _encryption_pub_key = int(self._private_key) * self._curve.g
         encrypted_msg, decryption_pub_key = self.__encrypt_ECC(file_obj, _encryption_pub_key)
-        print(f'encrypted msgs {encrypted_msg}')
         self.__write_file(encrypted_msg)
         if os.path.exists('encryptedfile'):
             with open('encryptedfile', 'rb') as fh:
                 response = HttpResponse(fh.read(), content_type="application/octet-stream")
                 response['Content-Disposition'] = 'inline; filename=' + 'encryptedfile'
+                print(f'Response: {response}')
                 return response
         

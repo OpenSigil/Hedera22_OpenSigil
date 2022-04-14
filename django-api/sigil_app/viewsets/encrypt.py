@@ -14,14 +14,7 @@ class EncryptViewSet(viewsets.ModelViewSet):
         self._encrypt_model = Encrypt()
         if request.method == 'POST':
             try:
-                self._encrypt_model.encrypt_file(request.FILES['data'])
-                return Response(
-                    {
-                        "success": TRUE,
-                        "msg": "File upload succeeded!",
-                    },
-                    status=status.HTTP_200_OK,
-                )
+                return self._encrypt_model.encrypt_file(request.FILES['data'])
             except Exception as e:
                 print(f'Exception encountered: {e}')
         return Response(
