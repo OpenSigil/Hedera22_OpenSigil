@@ -12,7 +12,6 @@ class DecryptViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         self._encrypt_model = Encrypt()
-        print("DECRYPT VIEWSET")
         if request.method == 'POST':
             try:
                 return self._encrypt_model.decrypt_file(request.FILES['data'])
