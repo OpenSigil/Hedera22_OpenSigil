@@ -3,7 +3,11 @@
 ### Sigil Example API Usage
 Encrypt File
 ```
-curl -X POST -F 'data=@{path_to_file}'  http://localhost:5000/api/sigil/encrypt
+curl -X POST -F 'data=@{path_to_file}'  http://localhost:5000/api/sigil/encrypt --output {path_to_encrypted_file}
+```
+Decrypt File
+```
+curl -X POST -F 'data=@{path_to_encrypted_file}'  http://localhost:5000/api/sigil/decrypt
 ```
 
 
