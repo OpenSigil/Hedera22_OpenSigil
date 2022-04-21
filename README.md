@@ -9,6 +9,12 @@ Decrypt File
 ```
 curl -X POST -F 'data=@{path_to_encrypted_file}'  http://localhost:5000/api/sigil/decrypt
 ```
+Smart Contract Demo
+```
+pipenv install
+cd scripts/demo/
+pipenv run python3 contract_demo.py
+```
 
 
 
