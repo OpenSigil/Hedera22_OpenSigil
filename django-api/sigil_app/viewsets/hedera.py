@@ -14,9 +14,9 @@ class HederaViewSet(viewsets.ModelViewSet):
         _hedera = HederaModel()
         if request.method == 'POST':
             return _hedera.encrypt_file(
-                account_id=request.headers['Account-Id'],
-                public_key=request.headers['Public-Key'],
-                private_key=request.headers['Private-Key'],
+                account_id=request.headers['ACCOUNT-ID'],
+                public_key=request.headers['PUBLIC-KEY'],
+                private_key=request.headers['PRIVATE-KEY'],
                 input_file=request.FILES['data'])
         return Response(
             {

@@ -11,7 +11,7 @@ curl -X POST -F 'data=@<path_to_encrypted_file>'  http://localhost:5000/api/sigi
 ```
 Encrypt File With Hedera Token
 ```
-curl -X POST -F 'data=@inputfile.txt'  http://localhost:5000/api/sigil/encrypt -H "ACCOUNT-ID: <hedera_account_id>" -H "PUBLIC-KEY: <hedera_public_key>" -H "PRIVATE-KEY: <hedera_private_key>" --output encryptedfile.txt
+curl -X POST -F 'data=@inputfile.txt'  http://localhost:5000/api/sigil/hedera -H "ACCOUNT-ID: <hedera_account_id>" -H "PUBLIC-KEY: <hedera_public_key>" -H "PRIVATE-KEY: <hedera_private_key>" --output encryptedfile.txt
 ```
 Smart Contract Demo
 ```
