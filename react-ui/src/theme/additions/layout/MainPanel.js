@@ -13,10 +13,7 @@ const MainPanel = {
   variants: {
     main: (props) => ({
       float: "right",
-    }),
-    rtl: (props) => ({
-      float: "left",
-    }),
+    })
   },
   defaultProps: {
     variant: "main",

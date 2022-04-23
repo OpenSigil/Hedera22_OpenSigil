@@ -161,3 +161,6 @@ TEST_RUNNER = "core.test_runner.CoreTestRunner"
 ENCRYPT_PRIVATE_KEY = os.environ.get("PRIVATE_KEY")
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# CORS SETTINGS
+CORS_ORIGIN_ALLOW_ALL = True

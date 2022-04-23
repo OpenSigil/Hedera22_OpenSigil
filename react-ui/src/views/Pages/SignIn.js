@@ -173,7 +173,7 @@ function SignIn() {
                   }}
                 />
                 <FormControl display="flex" alignItems="center">
-                  <Switch id="remember-login" colorScheme="teal" me="10px" />
+                  <Switch id="remember-login" colorscheme="teal" me="10px" />
                   <FormLabel
                     htmlFor="remember-login"
                     mb="1"

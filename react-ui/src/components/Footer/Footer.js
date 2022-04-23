@@ -34,9 +34,7 @@ export default function Footer(props) {
           href="https://bit.ly/3fKQZaL"
           target="_blank"
         >
-          {document.documentElement.dir === "rtl"
-            ? " توقيت الإبداعية"
-            : "Creative Tim "}
+          {"Creative Tim "}
         </Link>
         {' Coded by '} 
         <Link
@@ -45,7 +43,7 @@ export default function Footer(props) {
           href="https://appseed.us"
           target="_blank"
         >
-          {document.documentElement.dir === "rtl" ? "AppSeed" : "AppSeed"}
+          {"AppSeed"}
         </Link>
       </Text>
       <List display="flex">
@@ -58,9 +56,7 @@ export default function Footer(props) {
           <Link href="https://appseed.us/product/django-react-purity-dashboard"
             target="_blank"
             color="gray.400">
-            {document.documentElement.dir === "rtl"
-              ? "Product"
-              : "Product"}
+            {"Product"}
           </Link>
         </ListItem>
         <ListItem
@@ -72,7 +68,7 @@ export default function Footer(props) {
           <Link color="gray.400"
             target="_blank"
             href="https://appseed.us/support">
-            {document.documentElement.dir === "rtl" ? "Support" : "Support"}
+            {"Support"}
           </Link>
         </ListItem>
       </List>
