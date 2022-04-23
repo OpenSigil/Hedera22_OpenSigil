@@ -3,11 +3,10 @@ from django.core.files.uploadhandler import TemporaryFileUploadHandler
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
-from rest_framework.decorators import action
 
 from sigil_app.models import Encrypt
 
-class EncryptViewSet(viewsets.ModelViewSet):
+class DecryptViewSet(viewsets.ModelViewSet):
     http_method_names = ["post"]
     permission_classes = (AllowAny,)
 
@@ -15,7 +14,7 @@ class EncryptViewSet(viewsets.ModelViewSet):
         self._encrypt_model = Encrypt()
         if request.method == 'POST':
             try:
-                return self._encrypt_model.encrypt_file(request.FILES['data'])
+                return self._encrypt_model.decrypt_file(request.FILES['data'])
             except Exception as e:
                 print(f'Exception encountered: {e}')
         return Response(

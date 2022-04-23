@@ -159,6 +159,9 @@ TEST_RUNNER = "core.test_runner.CoreTestRunner"
 
 # Sigil Settings
 ENCRYPT_PRIVATE_KEY = os.environ.get("PRIVATE_KEY")
+CIPHER_PRIVATE_KEY = os.environ.get("CIPHER_PRIVATE_KEY")
+ECC_POINT_X = os.environ.get("ECC_POINT_X")
+ECC_POINT_Y = os.environ.get("ECC_POINT_Y")
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
