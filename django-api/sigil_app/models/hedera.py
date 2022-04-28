@@ -13,7 +13,8 @@ from hedera import (
 
 class HederaModel():
     def __init__(self):
-        pass
+        self._wallet_keys = self.__gen_new_cred()
+        
 
     def account_eval(self, account_id, private_key):
         try:
@@ -42,7 +43,25 @@ class HederaModel():
                 print(e)
             return False
 
+    def gen_auth_token(self, account_id, public_key, private_key):
+        token_id = self.__mint_token()
+        try:
+            response = self.__associate_token(account_id, token_id, self._wallet_keys)
+            print(f"Token Associated: {response.toString()}\n")
+        except Exception as e:
+            if 'TOKEN_ALREADY_ASSOCIATED_TO_ACCOUNT' in e.innermessage:
+                print('Token already associated w/ account...')
+            else:
+                raise(e)
+        response = self.__check_balance(account_id)
+        print(f"Account Balance of {token_id}: {response.tokens[token_id]}")
+
     def encrypt_file(self, account_id, public_key, private_key, input_file):
-        print("BEFORE ENCYPT FILE")
-        result = self.account_eval(account_id, private_key)
+        if self.account_eval(account_id, private_key):
+            
+        else:
+            print("Account eval failed")
         print(f'Account Status: {result}')
+    
+    # TODO: Replace functionality with smart contract
+    # Smart contract has functions, add user, remove user, check user, list users

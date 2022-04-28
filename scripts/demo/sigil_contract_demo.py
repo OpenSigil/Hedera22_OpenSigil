@@ -1,9 +1,11 @@
-import os
 import json
+import math
+import os
 
 from hedera import (
     Hbar,
     PrivateKey,
+    AccountId,
     AccountBalanceQuery,
     AccountCreateTransaction,
     AccountDeleteTransaction,
@@ -11,6 +13,7 @@ from hedera import (
     ContractCallQuery,
     ContractExecuteTransaction,
     ContractFunctionParameters,
+    FileAppendTransaction,
     FileCreateTransaction,
     TransferTransaction,
     TokenCreateTransaction,
@@ -119,12 +122,27 @@ def load_contract_bytecode(bytecode_path):
     return bytecode
 
 def upload_contract_bytecode(bytecode):
-    transaction = FileCreateTransaction()
-    resp = transaction.setKeys(OPERATOR_KEY
-        ).setContents(bytecode
-        ).setMaxAttempts(4
-        ).execute(client)
-    file_id = resp.getReceipt(client).fileId
+    # Files over 6kb need to chunked into smaller pieces
+    chunk_size = 5000 # in bytes
+    # Number of chunks = file bytes / chunk_size in bytes, rounded up
+    for i in range(math.ceil(len(bytecode)/chunk_size)):
+        bytes_range_start = (i * chunk_size)
+        bytes_range_end = ((i* chunk_size) + chunk_size)
+        # Grab "chunk" of file between byte range
+        bytecode_chunk = bytecode[bytes_range_start:bytes_range_end]
+        if i == 0: # Create file on first chunk
+            transaction = FileCreateTransaction()
+            resp = transaction.setKeys(OPERATOR_KEY
+                ).setContents(bytecode_chunk
+                ).setMaxAttempts(4
+                ).execute(client)
+            file_id = resp.getReceipt(client).fileId
+        else: # Add additional chunks w/ append transaction
+            transaction = FileAppendTransaction(
+            ).setFileId(file_id
+            ).setContents(bytecode_chunk
+            ).setMaxChunks(15
+            ).execute(client)
     return file_id
 
 def create_smart_contract(file_id):
@@ -157,42 +175,107 @@ def transact_smart_contract(contract_id, function_name, function_value_a, functi
             .execute(client))
     return result
 
-CONTRACT_PATH = '../../resources/contracts/compiled/check_balance.json'
+def transact_set_file_hash(contract_id, function_name, file_hash, transaction_fee):
+    result = (ContractExecuteTransaction()
+            .setGas(500000)
+            .setContractId(contract_id)
+            .setFunction(function_name,
+                        ContractFunctionParameters().addString(file_hash)
+                        )
+            .setMaxTransactionFee(Hbar(transaction_fee))
+            .execute(client))
+    return result
+
+def transact_set_owner(contract_id, function_name, owner_id, transaction_fee):
+    result = (ContractExecuteTransaction()
+            .setGas(500000)
+            .setContractId(contract_id)
+            .setFunction(function_name,
+                        ContractFunctionParameters().addAddress(owner_id.toSolidityAddress())
+                        )
+            .setMaxTransactionFee(Hbar(transaction_fee))
+            .execute(client))
+    return result
+
+def transact_add_revoke_access(contract_id, function_name, account_id, transaction_fee):
+    result = (ContractExecuteTransaction()
+            .setGas(500000)
+            .setContractId(contract_id)
+            .setFunction(function_name,
+                        ContractFunctionParameters().addAddress(account_id.toSolidityAddress())
+                        )
+            .setMaxTransactionFee(Hbar(transaction_fee))
+            .execute(client))
+    return result
+
+CONTRACT_PATH = '../../resources/contracts/compiled/sigil_contract.json'
 
 if __name__ == '__main__':
     Collections = autoclass("java.util.Collections")
     wallet_keys = gen_new_cred()
-    print(f"Private Key: {wallet_keys.toString()}\n")
-    print(f"Public Key: {wallet_keys.getPublicKey().toString()}\n")
+    #print(f"Private Key: {wallet_keys.toString()}\n")
+    #print(f"Public Key: {wallet_keys.getPublicKey().toString()}\n")
     node_id, account_id = create_account(wallet_keys, 1)
     print(f"Account Id: {account_id.toString()}\n")
-    token_id = mint_token(node_id)
-    print(f"Token Id: {token_id.toString()}\n")
-    response = associate_token(node_id, account_id, token_id, wallet_keys)
-    print(f"Token Associated: {response.toString()}\n")
-    response = send_tokens(node_id, account_id, token_id, 10)
-    print(f"Sending Tokens: {response.toString()}\n")
-    response = check_balance(account_id)
-    print(f"Account Balance: {response.toString()}\n")
     bytecode = load_contract_bytecode(CONTRACT_PATH)
     print(f"Loading contract bytecode...\n")
     file_id = upload_contract_bytecode(bytecode)
     print(f"Uploading contract bytecode\n")
     contract_id = create_smart_contract(file_id)
     print(f"Contract Created: {contract_id}\n")
-    response = transact_smart_contract(contract_id, "initTokenBalance", token_id, account_id, 20)  
+    response = query_smart_contract(contract_id, "getFileHash", 2)
+    message = response.getString(0)
+    print(f"[Contract] File Hash: {message}")
+    response = transact_set_file_hash(contract_id, "setFileHash", "HELLO", 20)  
     message = response.getReceipt(client).toString()
-    print(f"(Smart Contract) Initialized token balance vars: {contract_id}\n")
-    response = query_smart_contract(contract_id, "getTokenBalance", 2)
-    message = response.getUint256(0).toString()
-    print(f'(Smart Contract) Token Balance: {message}\n')
-    response = wipe_tokens(node_id, account_id, token_id, 10)
-    print(f"Wiping Account Tokens: {response.toString()}\n")
-    response = check_balance(account_id)
-    response = query_smart_contract(contract_id, "getTokenBalance", 2)
-    message = response.getUint256(0).toString()
-    print(f'(Smart Contract) Token Balance: {message}\n')
-    print(f"Deleting Token: {response.toString()}\n")
-    response = delete_account(account_id, wallet_keys)
-    print(f"Deleting Token: {response.toString()}\n")
-    
+    print(message.__dir__())
+    print(f"[Contract] Set File Hash: {message}")
+    response = query_smart_contract(contract_id, "getFileHash", 2)
+    message = response.getString(0)
+    print(f"[Contract] File Hash: {message}")
+    response = query_smart_contract(contract_id, "getFileHash", 2)
+    message = response.getString(0)
+    print(f"[Contract] Contract Owner: {message}")
+    response = transact_set_owner(contract_id, "setOwner", OPERATOR_ID, 20)  
+    message = response.getReceipt(client).toString()
+    print(f"[Contract] Set Contract Owner: {message}")
+    response = query_smart_contract(contract_id, "getOwner", 2)
+    print(f'Response: {response.__dir__()}')
+    message = response.getAddress(0)
+    print(response.getAddress(0))   
+    owner = AccountId.fromSolidityAddress(response.getAddress(0))
+    print(f"[Contract] Contract Owner: {owner.toString()}")
+    response = query_smart_contract(contract_id, "getAccessList", 2)
+    message = response.getStringArray(0)
+    print(f"[Contract] Access List: {message.toString()}")
+    response = transact_add_revoke_access(contract_id, "addAccess", OPERATOR_ID, 20)  
+    message = response.getReceipt(client).toString()
+    print(f"[Contract] Added Access For: {message}")
+    response = query_smart_contract(contract_id, "getAccessList", 2)
+    address_list = []
+    for i in range(2, 256):
+        try:
+            address_list.append(response.getAddress(i))
+        except Exception as e:
+            if 'End index' in e.innermessage:
+                break
+            else:
+                raise e
+    print(f"[Contract] Access List: {address_list}")
+    response = transact_add_revoke_access(contract_id, "revokeAccess", OPERATOR_ID, 20)  
+    message = response.getReceipt(client).toString()
+    print(f"[Contract] Revoked Access for: {message}")
+    print('Waiting...')
+    import time
+    time.sleep(10)
+    response = query_smart_contract(contract_id, "getAccessList", 2)
+    address_list = []
+    for i in range(2, 256):
+        try:
+            address_list.append(response.getAddress(i))
+        except Exception as e:
+            if 'End index' in e.innermessage:
+                break
+            else:
+                raise e
+    print(f"[Contract] Access List: {address_list}")
