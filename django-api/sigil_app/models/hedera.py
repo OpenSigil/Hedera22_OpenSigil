@@ -58,7 +58,7 @@ class HederaModel():
 
     def encrypt_file(self, account_id, public_key, private_key, input_file):
         if self.account_eval(account_id, private_key):
-            
+            print('TODO')
         else:
             print("Account eval failed")
         print(f'Account Status: {result}')
