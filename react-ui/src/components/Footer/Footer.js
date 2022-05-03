@@ -34,16 +34,7 @@ export default function Footer(props) {
           href="https://bit.ly/3fKQZaL"
           target="_blank"
         >
-          {"Creative Tim "}
-        </Link>
-        {' Coded by '} 
-        <Link
-          // color={linkTeal}
-          color="teal.400"
-          href="https://appseed.us"
-          target="_blank"
-        >
-          {"AppSeed"}
+          {"OpenSigil"}
         </Link>
       </Text>
       <List display="flex">

@@ -22,6 +22,8 @@ import PropTypes from "prop-types";
 import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
 
+import logo from "../../assets/img/logo.png";
+
 // FUNCTIONS
 
 function Sidebar(props) {
@@ -218,7 +220,8 @@ function Sidebar(props) {
         alignItems="center"
         fontSize="11px"
       >
-        <Text fontSize="sm" mt="3px">
+        <img src={logo} style={{ height: '20px' }}></img>
+        <Text fontSize="sm" mt="3px" paddingLeft={'5px'}>
           {logoText}
         </Text>
       </Link>
