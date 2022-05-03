@@ -2,20 +2,16 @@ import React from "react";
 import { Route } from "react-router-dom";
 import { useAuth } from "auth-context/auth.context";
 import { useHistory } from "react-router-dom";
-import SweetAlert from "react-bootstrap-sweetalert";
+import { useHashConnect } from "../auth-context/HashConnectProvider";
 
 export const ProtectedRoute = ({ ...rest }) => {
   const history = useHistory();
   let { user } = useAuth();
-  if (!user || !user.token || user.token === "") {
-    return (
-      <SweetAlert
-        title="You must be signed in!"
-        onCancel={() => history.push("/auth/signin")}
-        onConfirm={() => history.push("/auth/signin")}
-        confirmBtnCssClass={"px-5"}
-      />
-    );
+  const { walletData } = useHashConnect();
+
+
+  if (walletData?.accountIds?.length == null || walletData?.accountIds?.length == 0) {
+    history.push("/auth/signin")
   }
 
   return <Route {...rest} />;

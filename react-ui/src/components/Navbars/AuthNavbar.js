@@ -77,7 +77,7 @@ export default function AuthNavbar(props) {
       alignItems="center"
       color={mainText}
     >
-      <Text fontsize="sm" mt="3px">
+      <Text fontSize="sm" mt="3px">
         {logoText}
       </Text>
     </Link>
@@ -151,23 +151,6 @@ export default function AuthNavbar(props) {
           />
         </Box>
         {linksAuth}
-        <Link target="_blank" 
-          href="https://appseed.us/product/django-react-purity-dashboard">
-          <Button
-            bg={bgButton}
-            color={colorButton}
-            fontSize="xs"
-            variant="no-hover"
-            borderRadius="35px"
-            px="30px"
-            display={{
-              sm: "none",
-              lg: "flex",
-            }}
-          >
-            Free Download
-          </Button>
-        </Link>
       </Flex>
     </Flex>
   );

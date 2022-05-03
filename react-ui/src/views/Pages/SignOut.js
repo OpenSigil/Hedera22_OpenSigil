@@ -23,9 +23,10 @@ function SignOut() {
   let { user } = useAuth();
 
   const handleLogout = async () => {
-    await AuthApi.Logout(user);
-    await setUser(null);
+    //await AuthApi.Logout(user).catch(() => {});
+    //await setUser(null);
     localStorage.removeItem("user");
+    localStorage.removeItem("hashconnectData");
     return history.push("/auth/signin");
   };
 

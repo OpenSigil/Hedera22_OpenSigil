@@ -1,7 +1,6 @@
 // import
 import Dashboard from "views/Dashboard/Dashboard.js";
-import Tables from "views/Dashboard/Tables.js";
-import Billing from "views/Dashboard/Billing.js";
+import MyFiles from "views/Dashboard/MyFiles";
 import Profile from "views/Dashboard/Profile.js";
 import SignIn from "views/Pages/SignIn.js";
 import SignUp from "views/Pages/SignUp.js";
@@ -15,7 +14,6 @@ import {
   DocumentIcon,
   RocketIcon
 } from "components/Icons/Icons";
-import Files from "views/Dashboard/Files";
 
 var dashRoutes = [
   {
@@ -27,23 +25,9 @@ var dashRoutes = [
   },
   {
     path: "/files",
-    name: "Files",
+    name: "My Files",
     icon: <HomeIcon color="inherit" />,
-    component: Files,
-    layout: "/admin",
-  },
-  {
-    path: "/tables",
-    name: "Tables",
-    icon: <StatsIcon color="inherit" />,
-    component: Tables,
-    layout: "/admin",
-  },
-  {
-    path: "/billing",
-    name: "Billing",
-    icon: <CreditIcon color="inherit" />,
-    component: Billing,
+    component: MyFiles,
     layout: "/admin",
   },
   {

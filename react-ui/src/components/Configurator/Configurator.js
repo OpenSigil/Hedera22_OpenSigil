@@ -142,25 +142,6 @@ export default function Configurator(props) {
                 <Text fontSize="sm" mb="16px">
                   Choose between 2 different sidenav types.
                 </Text>
-                <Box>
-                  <Link
-                    href="https://appseed.us/product/django-react-purity-dashboard"
-                    w="100%"
-                    mb="16px"
-                  >
-                    <Button
-                      w="100%"
-                      mb="16px"
-                      bg={bgButton}
-                      color={colorButton}
-                      fontSize="xs"
-                      variant="no-hover"
-                      px="30px"
-                    >
-                      Free Download
-                    </Button>
-                  </Link>
-                </Box>
                 <Flex
                   justifyContent="center"
                   alignItems="center"
