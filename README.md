@@ -1,6 +1,22 @@
-## OpenSigil Development Notes
+## OpenSigil
 
-### Sigil Example API Usage
+### Setup
+1. Generate main encryption credentials
+```
+pipenv run python3 scripts/tools/generate_encryption_creds.py
+```
+2. Create new .env file
+```
+cp django_api/env.example django_api/.env
+```
+3. Update credentials of .env file based on results of generate_encryption_creds.py
+4. Create new client-config.json
+```
+cp resources/credentials/client-config_template.json resources/credentials/client-config.json
+```
+5. Add main Hedera credentials to client-config.json
+
+### Example API Usage
 Encrypt File
 ```
 curl -X POST -F 'data=@<path_to_file>'  http://localhost:5000/api/sigil/encrypt --output <path_to_encrypted_file>
