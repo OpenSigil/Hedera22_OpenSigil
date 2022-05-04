@@ -9,8 +9,8 @@ ENV PATH /app/node_modules/.bin:$PATH
 
 # install app dependencies
 COPY package.json ./
-RUN yarn install 
-RUN yarn global add react-scripts@4.0.0
+RUN npm install --silent
+RUN npm install react-scripts@4.0.0 -g --silent
 
 # add app
 COPY . ./
@@ -19,4 +19,4 @@ COPY . ./
 EXPOSE 3000
 
 # start app
-CMD ["yarn", "start"]
+CMD ["npm", "start"]
