@@ -1,6 +1,6 @@
 // import
 import Dashboard from "views/Dashboard/Dashboard.js";
-import MyFiles from "views/Dashboard/MyFiles";
+import Encryption from "views/Dashboard/Encryption";
 import MyFilesIPFS from "views/Dashboard/MyFilesIPFS";
 import Profile from "views/Dashboard/Profile.js";
 import SignIn from "views/Pages/SignIn.js";
@@ -22,15 +22,15 @@ var dashRoutes = [
     layout: "/admin",
   },
   {
-    path: "/files",
-    name: "Files",
+    path: "/encryption",
+    name: "Encrypt & Decrypt",
     icon: <HomeIcon color="inherit" />,
-    component: MyFiles,
+    component: Encryption,
     layout: "/admin",
   },
   {
-    path: "/files-ipfs",
-    name: "My Files (IPFS)",
+    path: "/files",
+    name: "My Files",
     icon: <HomeIcon color="inherit" />,
     component: MyFilesIPFS,
     layout: "/admin",

@@ -13,23 +13,55 @@ import {
 import React, { useState, useRef } from "react";
 import { AiFillLock, AiFillUnlock } from "react-icons/ai";
 
-export default function Files() {
+import FilesApi from "../../api/files";
+
+export default function Encryption() {
 
   const uploadRef = useRef(null);
   const downloadRef = useRef(null);
 
   const onEncryptUpload = async (file)  => {
     console.log(file);
-    const buffer = await file.arrayBuffer();
-    let byteArray = new Int8Array(buffer);
-    console.log(byteArray)
+    await FilesApi.Encrypt(file).then((response) => {
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute(
+        'download',
+        file.name + '.enc',
+      );
+  
+      // Append to html link element page
+      document.body.appendChild(link);
+  
+      // Start download
+      link.click();
+  
+      // Clean up and remove the link
+      link.parentNode.removeChild(link);
+    });
   }
 
   const onDecryptUpload = async (file)  => {
     console.log(file);
-    const buffer = await file.arrayBuffer();
-    let byteArray = new Int8Array(buffer);
-    console.log(byteArray)
+    await FilesApi.Decrypt(file).then((response) => {
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute(
+        'download',
+        file.name.replace('.enc', ''),
+      );
+  
+      // Append to html link element page
+      document.body.appendChild(link);
+  
+      // Start download
+      link.click();
+  
+      // Clean up and remove the link
+      link.parentNode.removeChild(link);
+    });
   }
 
   return (
