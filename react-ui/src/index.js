@@ -24,18 +24,25 @@ import AdminLayout from "layouts/Admin.js";
 
 import { ProtectedRoute } from "./layouts/ProtectedRoute";
 import { AuthProvider } from "auth-context/auth.context";
+import { HashConnect } from "hashconnect";
+import HashConnectProvider from "auth-context/HashConnectProvider";
+
+const hashConnect = new HashConnect(true);
+
 let user = localStorage.getItem("user");
 user = JSON.parse(user);
 
 ReactDOM.render(
   <AuthProvider userData={user}>
-    <HashRouter>
-      <Switch>
-        <Route path={`/auth`} component={AuthLayout} />
-        <ProtectedRoute path={`/admin`} component={AdminLayout} />
-        <Redirect from={`/`} to="/admin/dashboard" />
-      </Switch>
-    </HashRouter>
+    <HashConnectProvider hashConnect={hashConnect} debug>
+      <HashRouter>
+        <Switch>
+          <Route path={`/auth`} component={AuthLayout} />
+          <ProtectedRoute path={`/admin`} component={AdminLayout} />
+          <Redirect from={`/`} to="/admin/dashboard" />
+        </Switch>
+      </HashRouter>
+    </HashConnectProvider>
   </AuthProvider>,
   document.getElementById("root")
 );

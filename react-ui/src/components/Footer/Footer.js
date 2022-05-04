@@ -34,44 +34,9 @@ export default function Footer(props) {
           href="https://bit.ly/3fKQZaL"
           target="_blank"
         >
-          {"Creative Tim "}
-        </Link>
-        {' Coded by '} 
-        <Link
-          // color={linkTeal}
-          color="teal.400"
-          href="https://appseed.us"
-          target="_blank"
-        >
-          {"AppSeed"}
+          {"OpenSigil"}
         </Link>
       </Text>
-      <List display="flex">
-        <ListItem
-          me={{
-            base: "20px",
-            md: "44px",
-          }}
-        >
-          <Link href="https://appseed.us/product/django-react-purity-dashboard"
-            target="_blank"
-            color="gray.400">
-            {"Product"}
-          </Link>
-        </ListItem>
-        <ListItem
-          me={{
-            base: "20px",
-            md: "44px",
-          }}
-        >
-          <Link color="gray.400"
-            target="_blank"
-            href="https://appseed.us/support">
-            {"Support"}
-          </Link>
-        </ListItem>
-      </List>
     </Flex>
   );
 }

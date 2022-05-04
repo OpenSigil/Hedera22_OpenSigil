@@ -20,7 +20,6 @@ import {
   Th,
   Thead,
   Tr,
-  useColorMode,
   useColorModeValue,
 } from "@chakra-ui/react";
 // assets
@@ -51,24 +50,9 @@ import { IoCheckmarkDoneCircleSharp } from "react-icons/io5";
 import { dashboardTableData, timelineData } from "variables/general";
 
 export default function Dashboard() {
-  const value = "$100.000";
-  // Chakra Color Mode
-  const { colorMode, toggleColorMode } = useColorMode();
   const iconTeal = useColorModeValue("teal.300", "teal.300");
   const iconBoxInside = useColorModeValue("white", "white");
   const textColor = useColorModeValue("gray.700", "white");
-  const [series, setSeries] = useState([
-    {
-      type: "area",
-      name: "Mobile apps",
-      data: [190, 220, 205, 350, 370, 450, 400, 360, 210, 250, 292, 150],
-    },
-    {
-      type: "area",
-      name: "Websites",
-      data: [400, 291, 121, 117, 25, 133, 121, 211, 147, 25, 201, 203],
-    },
-  ]);
   const overlayRef = React.useRef();
 
   return (
@@ -600,42 +584,6 @@ export default function Dashboard() {
               })}
             </Tbody>
           </Table>
-        </Card>
-        <Card maxH="100%">
-          <CardHeader p="22px 0px 35px 14px">
-            <Flex direction="column">
-              <Text
-                fontSize="lg"
-                color={textColor}
-                fontWeight="bold"
-                pb=".5rem"
-              >
-                Orders overview
-              </Text>
-              <Text fontSize="sm" color="gray.400" fontWeight="normal">
-                <Text fontWeight="bold" as="span" color="teal.300">
-                  +30%
-                </Text>{" "}
-                this month.
-              </Text>
-            </Flex>
-          </CardHeader>
-          <CardBody ps="20px" pe="0px" mb="31px" position="relative">
-            <Flex direction="column">
-              {timelineData.map((row, index, arr) => {
-                return (
-                  <TimelineRow
-                    logo={row.logo}
-                    title={row.title}
-                    date={row.date}
-                    color={row.color}
-                    index={index}
-                    arrLength={arr.length}
-                  />
-                );
-              })}
-            </Flex>
-          </CardBody>
         </Card>
       </Grid>
     </Flex>

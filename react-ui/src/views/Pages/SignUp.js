@@ -16,7 +16,6 @@ import {
 // Assets
 import BgSignUp from "assets/img/BgSignUp.png";
 import React, { useState } from "react";
-import { FaApple, FaFacebook, FaGoogle } from "react-icons/fa";
 
 import AuthApi from "../../api/auth";
 import { useHistory } from "react-router-dom";
@@ -103,17 +102,6 @@ function SignUp() {
         <Text fontSize="4xl" color="white" fontWeight="bold">
           Welcome!
         </Text>
-        <Text
-          fontSize="md"
-          color="white"
-          fontWeight="normal"
-          mt="10px"
-          mb="26px"
-          w={{ base: "90%", sm: "60%", lg: "40%", xl: "30%" }}
-        >
-          Use these awesome forms to login or create new account in your project
-          for free.
-        </Text>
       </Flex>
       <Flex alignItems="center" justifyContent="center" mb="60px" mt="20px">
         <Flex
@@ -127,22 +115,13 @@ function SignUp() {
           boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
         >
           <Text
-            fontSize="xl"
-            color={textColor}
-            fontWeight="bold"
-            textAlign="center"
-            mb="22px"
-          >
-            Django React Purity
-          </Text>
-          <Text
             fontSize="lg"
             color="gray.400"
             fontWeight="bold"
             textAlign="center"
             mb="22px"
           >
-            Add your credentials
+            Create An Account
           </Text>
           <FormControl>
             <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
@@ -231,17 +210,6 @@ function SignUp() {
               {buttonText}
             </Button>
           </FormControl>
-          <Flex
-            flexDirection="column"
-            justifyContent="center"
-            alignItems="center"
-            maxW="100%"
-            mt="0px"
-          >
-            <Text color={textColor} fontWeight="medium">
-              Open-source Full-Stack Seed Project
-            </Text>
-          </Flex>
         </Flex>
       </Flex>
     </Flex>
