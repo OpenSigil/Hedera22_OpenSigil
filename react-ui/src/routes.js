@@ -1,15 +1,13 @@
 // import
 import Dashboard from "views/Dashboard/Dashboard.js";
 import MyFiles from "views/Dashboard/MyFiles";
+import MyFilesIPFS from "views/Dashboard/MyFilesIPFS";
 import Profile from "views/Dashboard/Profile.js";
 import SignIn from "views/Pages/SignIn.js";
-import SignUp from "views/Pages/SignUp.js";
 import SignOut from "views/Pages/SignOut.js";
 
 import {
   HomeIcon,
-  StatsIcon,
-  CreditIcon,
   PersonIcon,
   DocumentIcon,
   RocketIcon
@@ -25,38 +23,28 @@ var dashRoutes = [
   },
   {
     path: "/files",
-    name: "My Files",
+    name: "Files",
     icon: <HomeIcon color="inherit" />,
     component: MyFiles,
     layout: "/admin",
   },
   {
-    name: "ACCOUNT PAGES",
+    path: "/files-ipfs",
+    name: "My Files (IPFS)",
+    icon: <HomeIcon color="inherit" />,
+    component: MyFilesIPFS,
+    layout: "/admin",
+  },
+  {
+    name: "My Account",
     category: "account",
     state: "pageCollapse",
     views: [
-      {
-        path: "/profile",
-        name: "Profile",
-        icon: <PersonIcon color="inherit" />,
-        secondaryNavbar: true,
-        component: Profile,
-        layout: "/admin",
-      },
       {
         path: "/signin",
         name: "Sign In",
         icon: <DocumentIcon color="inherit" />,
         component: SignIn,
-        layout: "/auth",
-        hide: true
-      },
-      {
-        path: "/signup",
-        name: "Sign Up",
-        icon: <RocketIcon color="inherit" />,
-        secondaryNavbar: true,
-        component: SignUp,
         layout: "/auth",
         hide: true
       },

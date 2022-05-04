@@ -84,22 +84,6 @@ export default function AuthNavbar(props) {
   );
   var linksAuth = (
     <HStack display={{ sm: "none", lg: "flex" }}>
-      <NavLink to="/auth/signup">
-        <Button
-          fontSize="sm"
-          ms="0px"
-          me="0px"
-          px="0px"
-          me={{ sm: "2px", md: "16px" }}
-          color={navbarIcon}
-          variant="transparent-with-icon"
-          leftIcon={
-            <RocketIcon color={navbarIcon} w="12px" h="12px" me="0px" />
-          }
-        >
-          <Text>Sign Up</Text>
-        </Button>
-      </NavLink>
       <NavLink to="/auth/signin">
         <Button
           fontSize="sm"
