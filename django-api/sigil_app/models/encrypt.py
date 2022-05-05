@@ -68,13 +68,14 @@ class Encrypt():
         file_obj = self.__load_file(input_file)
         _encryption_pub_key = int(self._private_key) * self._curve.g
         encrypted_msg, decryption_pub_key = self.__encrypt_ECC(file_obj, _encryption_pub_key)
-        self.__write_file(encrypted_msg, 'encryptedfile')
-        if os.path.exists('encryptedfile'):
-            with open('encryptedfile', 'rb') as fh:
+        temp_file_path = 'encryptedfile'
+        self.__write_file(encrypted_msg, temp_file_path)
+        if os.path.exists(temp_file_path):
+            with open(temp_file_path, 'rb') as fh:
                 response = HttpResponse(fh.read(), content_type="application/octet-stream")
                 response['Content-Disposition'] = 'inline; filename=' + 'encryptedfile'
                 print(f'Response: {response}')
-                return response
+                return (response, temp_file_path)
     
     def decrypt_file(self, input_file):
         file_obj = self.__load_file(input_file)
@@ -87,3 +88,11 @@ class Encrypt():
                 response['Content-Disposition'] = 'inline; filename=' + 'decryptedfile'
                 print(f'Response: {response}')
                 return response
+    
+    def get_file_hash(self, input_file): 
+        sha256_hash = hashlib.sha256()
+        with open(input_file,"rb") as f:
+            # Read and update hash string value in blocks of 4K
+            for byte_block in iter(lambda: f.read(4096),b""):
+                sha256_hash.update(byte_block)
+        return sha256_hash.hexdigest()

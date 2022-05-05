@@ -25,9 +25,12 @@ cp django_api/env.example django_api/.env
 4. Update credentials of .env file based on results of generate_encryption_creds.py
 5. Create new client-config.json
 ```
+# Scripts
 cp resources/credentials/client-config_template.json resources/credentials/client-config.json
+# Django (Docker doesn't support symlinks)
+cp django-api/resources/credentials/client-config_template.json django-api/resources/credentials/client-config.json
 ```
-6. Add main Hedera credentials to client-config.json
+6. Add main Hedera credentials to client-config.json(s)
 
 ### Example API Usage
 Encrypt File

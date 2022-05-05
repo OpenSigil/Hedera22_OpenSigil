@@ -13,6 +13,7 @@ class HederaViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         _hedera = HederaModel()
         if request.method == 'POST':
+            
             return _hedera.encrypt_file(
                 account_id=request.headers['ACCOUNT-ID'],
                 public_key=request.headers['PUBLIC-KEY'],

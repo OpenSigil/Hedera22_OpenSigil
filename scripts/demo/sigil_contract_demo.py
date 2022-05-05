@@ -228,7 +228,6 @@ if __name__ == '__main__':
     print(f"[Contract] File Hash: {message}")
     response = transact_set_file_hash(contract_id, "setFileHash", "HELLO", 20)  
     message = response.getReceipt(client).toString()
-    print(message.__dir__())
     print(f"[Contract] Set File Hash: {message}")
     response = query_smart_contract(contract_id, "getFileHash", 2)
     message = response.getString(0)
