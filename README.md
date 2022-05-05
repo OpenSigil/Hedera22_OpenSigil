@@ -1,5 +1,9 @@
 ## OpenSigil
 
+## Usage
+Requires:
+- [Google Chrome](https://www.google.com/chrome/downloads/)
+- [The Hashpack Extension & Wallet](https://www.hashpack.app/)
 ### Prerequisites
 - Python 3
 - Pipenv
