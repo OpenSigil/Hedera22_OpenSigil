@@ -26,3 +26,78 @@ class HederaViewSet(viewsets.ModelViewSet):
             },
             status=status.HTTP_200_OK,
         )
+
+class HederaListViewSet(viewsets.ModelViewSet):
+    http_method_names = ["post"]
+    permission_classes = (AllowAny,)
+    def create(self, request, *args, **kwargs):
+        _hedera = HederaModel()
+        if request.method == 'POST':
+            return Response(
+                {
+                    "success": TRUE,
+                    "msg": "Smart contract query succeeded!",
+                    "access_list": _hedera.list_access(
+                        contract_id=request.headers['CONTRACT-ID']
+                    )
+                },
+                status=status.HTTP_200_OK,
+            )
+        return Response(
+            {
+                "success": FALSE,
+                "msg": "Smart contract query failed!",
+                "access_list": None
+            },
+            status=status.HTTP_200_OK,
+        )
+
+class HederaAddViewSet(viewsets.ModelViewSet):
+    http_method_names = ["post"]
+    permission_classes = (AllowAny,)
+    def create(self, request, *args, **kwargs):
+        _hedera = HederaModel()
+        if request.method == 'POST':
+            if _hedera.add_access(
+                contract_id=request.headers['CONTRACT-ID'],
+                account_id=request.headers['ACCOUNT-ID']
+            ):
+                return Response(
+                    {
+                        "success": TRUE,
+                        "msg": "Smart contract query succeeded!",
+                    },
+                    status=status.HTTP_200_OK,
+                )
+        return Response(
+            {
+                "success": FALSE,
+                "msg": "Smart contract query failed!",
+            },
+            status=status.HTTP_200_OK,
+        )
+
+class HederaRevokeViewSet(viewsets.ModelViewSet):
+    http_method_names = ["post"]
+    permission_classes = (AllowAny,)
+    def create(self, request, *args, **kwargs):
+        _hedera = HederaModel()
+        if request.method == 'POST':
+            if _hedera.revoke_access(
+                contract_id=request.headers['CONTRACT-ID'],
+                account_id=request.headers['ACCOUNT-ID']
+            ):
+                return Response(
+                    {
+                        "success": TRUE,
+                        "msg": "Smart contract query succeeded!",
+                    },
+                    status=status.HTTP_200_OK,
+                )
+        return Response(
+            {
+                "success": FALSE,
+                "msg": "Smart contract query failed!",
+            },
+            status=status.HTTP_200_OK,
+        )

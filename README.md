@@ -45,6 +45,19 @@ Encrypt File With Hedera Token
 ```
 curl -X POST -F 'data=@inputfile.txt'  http://localhost:5000/api/sigil/hedera -H "ACCOUNT-ID: <hedera_account_id>" -H "PUBLIC-KEY: <hedera_public_key>" -H "PRIVATE-KEY: <hedera_private_key>" --output encryptedfile.txt
 ```
+Check Access List for Decryption
+```
+curl -X POST -F 'data=@inputfile.txt'  http://localhost:5000/api/sigil/list-access -H "CONTRACT-ID: <hedera_contract_id>"
+```
+Add Account ID to Access List
+```
+curl -X POST -F 'data=@inputfile.txt'  http://localhost:5000/api/sigil/add-access -H "CONTRACT-ID: <hedera_contract_id>" -H "ACCOUNT-ID: <hedera_account_id>"
+```
+Add Remove ID from Access List
+```
+curl -X POST -F 'data=@inputfile.txt'  http://localhost:5000/api/sigil/revoke-access -H "CONTRACT-ID: <hedera_contract_id>" -H "ACCOUNT-ID: <hedera_account_id>"
+```
+### Demo Script Usage
 Smart Contract Demo
 ```
 pipenv install

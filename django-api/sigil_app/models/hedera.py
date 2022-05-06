@@ -9,9 +9,11 @@ from django.http import HttpResponse
 from hedera import (
     AccountId,
     Client,
+    ContractCallQuery,
     ContractCreateTransaction,
     ContractExecuteTransaction,
     ContractFunctionParameters,
+    ContractId,
     FileAppendTransaction,
     FileCreateTransaction,
     Hbar,
@@ -135,6 +137,27 @@ class HederaModel():
                 .execute(client))
         return result
 
+    def __query_smart_contract(self, contract_id, function_name, payment_amount):
+        result = (ContractCallQuery()
+            .setGas(500000)
+            .setContractId(ContractId.fromString(contract_id))
+            .setFunction(function_name)
+            .setQueryPayment(Hbar(payment_amount))
+            .execute(client))
+        return result
+
+    def __transact_add_revoke_access(self, contract_id, function_name, account_id, transaction_fee):
+        print("ADD REVOKE ACCESS")
+        result = (ContractExecuteTransaction()
+                .setGas(500000)
+                .setContractId(ContractId.fromString(contract_id))
+                .setFunction(function_name,
+                            ContractFunctionParameters().addAddress(AccountId.fromString(account_id).toSolidityAddress())
+                            )
+                .setMaxTransactionFee(Hbar(transaction_fee))
+                .execute(client))
+        return result
+
     def encrypt_file(self, account_id, public_key, private_key, input_file):
         if self.account_eval(account_id, private_key):
             bytecode = self.load_contract_bytecode(CONTRACT_PATH)
@@ -142,7 +165,7 @@ class HederaModel():
             file_id = self.upload_contract_bytecode(bytecode)
             print(f"Uploading contract bytecode\n")
             contract_id = self.create_smart_contract(file_id)
-            print(f"Contract Created: {contract_id}\n")
+            print(f"Contract Created: {contract_id.toString()}\n")
             response = self.__transact_set_owner(contract_id, "setOwner", OPERATOR_ID, 20)  
             print(f" Set Contract Owner")
             # Encrypt here
@@ -158,6 +181,30 @@ class HederaModel():
         else:
             print("Account eval failed")
         print(f'Account Status: {result}')
-    
-    # TODO: Replace functionality with smart contract
-    # Smart contract has functions, add user, remove user, check user, list users
+
+    def list_access(self, contract_id):
+        print("PRE LIST ACCESS")
+        response = self.__query_smart_contract(contract_id, "getAccessList", 2)
+        address_list = []
+        for i in range(2, 256):
+            try:
+                # Address is in hex, convert to int & add hedera address prefix (0.0.)
+                address_list.append(f'0.0.{int(response.getAddress(i), 16)}')
+            except Exception as e:
+                if 'End index' in e.innermessage:
+                    break
+                else:
+                    raise e
+        return address_list
+
+    def add_access(self, contract_id, account_id):
+        response = self.__transact_add_revoke_access(contract_id, "addAccess", account_id, 20)  
+        message = response.getReceipt(client).toString()
+        print(f"[Contract] Added Access For: {account_id}")
+        return True
+
+    def revoke_access(self, contract_id, account_id):
+        response = self.__transact_add_revoke_access(contract_id, "revokeAccess", account_id, 20)  
+        message = response.getReceipt(client).toString()
+        print(f"[Contract] Revoked Access For: {account_id}")
+        return True
