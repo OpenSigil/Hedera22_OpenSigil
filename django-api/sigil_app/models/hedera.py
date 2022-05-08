@@ -1,6 +1,7 @@
 import json
 import math
 import os
+from traceback import print_tb
 
 from cryptography.fernet import Fernet
 from django.db import models
@@ -21,13 +22,19 @@ from hedera import (
     )
 
 from sigil_app.models.encrypt import Encrypt
+from sigil_app.models.fake_db import FakeDb
 from common.get_client import client, OPERATOR_ID, OPERATOR_KEY
 
 CONTRACT_PATH = '../../resources/contracts/compiled/sigil_contract.json'
 
 class HederaModel():
     def __init__(self):
-        self._wallet_keys = self.__gen_new_cred()
+        try:
+            self._wallet_keys = self.__gen_new_cred()
+            self._fake_db = FakeDb()
+        except Exception as e:
+            print(e)
+            raise Exception(e)
     
     def __gen_new_cred(self):
         wallet_keys = PrivateKey.generate()
@@ -126,11 +133,11 @@ class HederaModel():
                 .execute(client))
         return result
 
-    def __transact_set_file_hash(self, contract_id, function_name, file_hash, transaction_fee):
+    def __transact_set_file_hash(self, contract_id, file_hash, transaction_fee):
         result = (ContractExecuteTransaction()
                 .setGas(500000)
                 .setContractId(contract_id)
-                .setFunction(function_name,
+                .setFunction('setFileHash',
                             ContractFunctionParameters().addString(file_hash)
                             )
                 .setMaxTransactionFee(Hbar(transaction_fee))
@@ -159,6 +166,7 @@ class HederaModel():
         return result
 
     def encrypt_file(self, account_id, public_key, private_key, input_file):
+        print('Encrypt file')
         if self.account_eval(account_id, private_key):
             bytecode = self.load_contract_bytecode(CONTRACT_PATH)
             print(f"Loading contract bytecode...\n")
@@ -174,16 +182,16 @@ class HederaModel():
             print("Encrypted file")
             file_hash = sigil_cryptography.get_file_hash(temp_file_path)
             print(f"Encrypted file hash: {file_hash}")
-            response = self.__transact_set_file_hash(contract_id, file_hash, "HELLO", 20)  
+            response = self.__transact_set_file_hash(contract_id, file_hash, 20)  
             message = response.getReceipt(client).toString()
             print(f"[Contract] Set File Hash: {message}")
+            self._fake_db.add_record(account_id, file_hash, contract_id.toString())
             return encrypted_file
         else:
             print("Account eval failed")
-        print(f'Account Status: {result}')
+            return None
 
     def list_access(self, contract_id):
-        print("PRE LIST ACCESS")
         response = self.__query_smart_contract(contract_id, "getAccessList", 2)
         address_list = []
         for i in range(2, 256):
@@ -195,6 +203,7 @@ class HederaModel():
                     break
                 else:
                     raise e
+        print(f'Address list: {address_list}')
         return address_list
 
     def add_access(self, contract_id, account_id):

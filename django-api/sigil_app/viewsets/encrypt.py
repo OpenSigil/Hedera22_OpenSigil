@@ -10,12 +10,11 @@ from sigil_app.models import Encrypt
 class EncryptViewSet(viewsets.ModelViewSet):
     http_method_names = ["post"]
     permission_classes = (AllowAny,)
-
     def create(self, request, *args, **kwargs):
         self._encrypt_model = Encrypt()
         if request.method == 'POST':
             try:
-                return self._encrypt_model.encrypt_file(request.FILES['data'], temp_file_path)
+                return self._encrypt_model.encrypt_file(request.FILES['data'])
             except Exception as e:
                 print(f'Exception encountered: {e}')
         return Response(
