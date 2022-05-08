@@ -1,5 +1,56 @@
 ## OpenSigil
 
+## About
+Traditional encryption-decryption applications required multi-party trust functions (*a non zero-trust approach*), whether that's between
+- A sender and recipient (in the case of private key sharing)
+- A sender, recipient, and 3rd party (in the case of cloud/private applications)
+
+or require absurd amounts of IT & security resources for simple file sharing. 
+
+We believe a better, easier, and more secure solution should be available by now, and after searching found none, so we made our own!
+
+__OpenSigil__ is a unique zero-trust file encryption solution that runs primarily on the [Hedera Smart Contract Service](https://hedera.com/smart-contract). Anyone with a [Hashpack wallet](https://www.hashpack.app/) can sign in, encrypt a file, and share the encrypted file however, and with whomever they like. 
+
+It's up to the original file owner to decide who has the ability to decrypt their copy of the file, and access can be provided or revoked at any time.
+
+This application is completely open source, frontend, backend, dockerfiles, even the smart contract source is available to be verified. We encourage users to explore our reposititory and provide comments, suggestions, submit issues and improvements! This project is currently in the demo-only stage for the [Hedera22](https://hedera.com/blog/hedera22-hackathon-smart-contracts) hackathon. It's not ready for mainnet use quite yet, but we hope to be production ready shortly after judging is over!
+
+### How it Works
+1. A file owner selects a file to be encrypted
+2. This file is then encrypted asymmetrically using a public key generated with Fernet and Elliptic Curve Cryptography
+3. After the file is successfully encrypted, a smart contract is generated on the Hedera Smart Contract service which contains
+    1. The sha256 hash of the encrypted file
+    2. The owner's Hedera account id
+    3. A list of account's with decryption access
+4. At any point the file owner can submit an order to add/revoke decryption access to the encrypted file
+5. Whenever another user tries to decrypt a file on the platform, the application will hash the file, find the associated Hedera Contract and check if a user has decryption access
+6. If this user passes authentication, then the file is decrypted and immediately made available in it's exact original state! 
+
+### Why Smart Contracts?
+While our platform code is open source, it's much harder to verify our platform is running the code we say it is. And it's infeasible for trust and resource reasons to expect every user to spin up their own version each time they want to share a file. So instead, we run the code that's essential for a good user experience. But all authentication code is hosted and executed using Smart Contracts. 
+
+Smart contracts are what make __OpenSigil__ so __Open__ (*and zero trust*), all computations happen remotely on a distrubuted and verifiable system with a guaranteed state. At any point any user can verify not just who *has* access, but who *had* access, for *how long*, and *how that access was provided*.
+
+Any user encrypting a file can ensure their associated contract contains the proper logic, and executes properly. They can also setup their own watchdog and log any interaction with their contract thanks to [Hedera Mirror Nodes](https://docs.hedera.com/guides/core-concepts/mirror-nodes). And all of this happens completely separate from our application, with all operations verifiable with any compatable 3rd party network explorer or Hedera-compatible solution.
+
+In summary, we use Smart Contracts because *it's the only way to create a completely trustless and verifiable access & authentication system*.
+
+### Why Hedera?
+Since our application requires Smart Contracts for zero-trust operations, we need cheap, fast transactions with as close to a 0% failure rate as possible. The Hedera Smart Contract Service is the only available distributed technology platform that can fit our needs.
+
+Hedera contracts have
+- Extremely low fees at an avg of 1$ for contract creation and .026$ for each update transaction [source](https://hedera.com/fees)
+  - Compare that to 500$ for a __simple__ Eth contract, with features like KYC raising the cost to 5 figures+ [source](https://medium.com/the-capital/how-much-does-it-cost-to-deploy-a-smart-contract-on-ethereum-11bcd64da1)
+- Fast, fair-ordered transactions, where it's a FIFO based queue. Rather than the competition, which requires gas-based bribery for pitiful execution times
+- Guaranteed finality (with appropriate gas calculation) [source](https://hedera.com/hh-consensus-service-whitepaper.pdf)
+- Environmental sustainability [source](https://hedera.com/carbon-offsets)
+  - While not essential for technical execution, the purpose of this project is to solve problems, not to create bigger ones for ourselves and future generations.
+
+### Why ECC & Fernet Encryption?
+Elliptic Curve Cryptography provides cutting edge public-key cryptography (which is required for technical execution). While certainly harder to technically impliment than RSA, for private key operations such as signature generation or key management, __ECC is 50-100x faster than RSA for most 256-bit operations__. Yet, all asymmetric algorithms drastically lose performance with larger payload size, and ECC is no exception. 
+
+Instead we use symmetric encryption to crytographically protect file data, with ECC used to generate a public and private key based on the symmetric private key. Fernet was chosen as the best possible cipher due to it's performance, minimal resource requirements, security and ease of implimentation.
+
 ## Usage
 Requires:
 - [Google Chrome](https://www.google.com/chrome/downloads/)
