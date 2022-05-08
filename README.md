@@ -57,6 +57,18 @@ Add Remove ID from Access List
 ```
 curl -X POST -F 'data=@inputfile.txt'  http://localhost:5000/api/sigil/revoke-access -H "CONTRACT-ID: <hedera_contract_id>" -H "ACCOUNT-ID: <hedera_account_id>"
 ```
+Add Remove ID from Access List
+```
+curl -X POST -F 'data=@inputfile.txt'  http://localhost:5000/api/sigil/revoke-access -H "CONTRACT-ID: <hedera_contract_id>" -H "ACCOUNT-ID: <hedera_account_id>"
+```
+Associate a File Hash & Contract Id With a Hedera Account Id
+```
+curl -X POST http://localhost:5000/api/sigil/add-record -H "ACCOUNT-ID: <hedera_account_id>" -H "CONTRACT-ID: <hedera_contract_id>" -H "FILE-HASH: <encrypted_file_hash>"
+```
+Get List of File Hashes & Contract Id's Associated With a Hedera Account
+```
+curl -X POST http://localhost:5000/api/sigil/get-record -H "ACCOUNT-ID: <hedera_account_id>"
+```
 ### Demo Script Usage
 Smart Contract Demo
 ```

@@ -2,6 +2,8 @@ from rest_framework import routers
 
 from sigil_app.viewsets import (
     EncryptViewSet,
+    DbAddRecord,
+    DbReturnRecord,
     DecryptViewSet,
     HederaViewSet,
     HederaListViewSet,
@@ -17,6 +19,8 @@ router.register(r"hedera", HederaViewSet, basename="hedera")
 router.register(r"list-access", HederaListViewSet, basename="hedera")
 router.register(r"add-access", HederaAddViewSet, basename="hedera")
 router.register(r"revoke-access", HederaRevokeViewSet, basename="hedera")
+router.register(r"add-record", DbAddRecord, basename="db")
+router.register(r"get-record", DbReturnRecord, basename="db")
 
 urlpatterns = [
     *router.urls,
