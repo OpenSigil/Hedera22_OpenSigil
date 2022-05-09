@@ -5,7 +5,13 @@ class FilesApi {
     let form = new FormData();
     form.append('data', file);
 
-    return axios.post(`${base}/encrypt`, form);
+    return axios.post(`${base}/hedera`, form, {
+      headers: {
+        'ACCOUNT-ID': '0.0.34729650',
+        'PUBLIC-KEY': 'ForDemoPurposesOnly!',
+        'PRIVATE-KEY': ''
+      }
+    });
   };
 
   static Decrypt = (file) => {
