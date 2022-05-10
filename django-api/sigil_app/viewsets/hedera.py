@@ -6,7 +6,7 @@ from rest_framework.permissions import AllowAny
 
 from sigil_app.models import HederaModel
 
-class HederaViewSet(viewsets.ModelViewSet):
+class HederaEncryptViewSet(viewsets.ModelViewSet):
     http_method_names = ["post"]
     permission_classes = (AllowAny,)
     def create(self, request, *args, **kwargs):
@@ -18,6 +18,30 @@ class HederaViewSet(viewsets.ModelViewSet):
                     public_key=request.headers['PUBLIC-KEY'],
                     private_key=request.headers['PRIVATE-KEY'],
                     input_file=request.FILES['data'])
+            return Response(
+                {
+                    "success": FALSE,
+                    "msg": "File upload failed!",
+                },
+                status=status.HTTP_200_OK,
+            )
+        except Exception as e:
+            print(e)
+
+class HederaDecryptViewSet(viewsets.ModelViewSet):
+    print('DECRYPT VIEWSET')
+    http_method_names = ["post"]
+    permission_classes = (AllowAny,)
+    def create(self, request, *args, **kwargs):
+        try:
+            _hedera = HederaModel()
+            if request.method == 'POST':
+                print('DECRYPT FILE')
+                return _hedera.decrypt_file(
+                    account_id=request.headers['ACCOUNT-ID'],
+                    contract_id=request.headers['CONTRACT-ID'],
+                    input_file=request.FILES['data']
+                    )
             return Response(
                 {
                     "success": FALSE,

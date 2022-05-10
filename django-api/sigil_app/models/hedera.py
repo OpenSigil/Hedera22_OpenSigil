@@ -127,7 +127,7 @@ class HederaModel():
                 .setGas(500000)
                 .setContractId(contract_id)
                 .setFunction(function_name,
-                            ContractFunctionParameters().addAddress(owner_id.toSolidityAddress())
+                            ContractFunctionParameters().addAddress(AccountId.fromString(owner_id).toSolidityAddress())
                             )
                 .setMaxTransactionFee(Hbar(transaction_fee))
                 .execute(client))
@@ -155,6 +155,8 @@ class HederaModel():
 
     def __transact_add_revoke_access(self, contract_id, function_name, account_id, transaction_fee):
         print("ADD REVOKE ACCESS")
+        print(account_id)
+        print(contract_id)
         result = (ContractExecuteTransaction()
                 .setGas(500000)
                 .setContractId(ContractId.fromString(contract_id))
@@ -174,8 +176,8 @@ class HederaModel():
             print(f"Uploading contract bytecode\n")
             contract_id = self.create_smart_contract(file_id)
             print(f"Contract Created: {contract_id.toString()}\n")
-            response = self.__transact_set_owner(contract_id, "setOwner", OPERATOR_ID, 20)  
-            print(f" Set Contract Owner")
+            response = self.__transact_set_owner(contract_id, "setOwner", account_id, 20)  
+            print(f"Set Contract Owner")
             # Encrypt here
             sigil_cryptography = Encrypt()
             encrypted_file, temp_file_path = sigil_cryptography.encrypt_file(input_file)
@@ -185,6 +187,9 @@ class HederaModel():
             response = self.__transact_set_file_hash(contract_id, file_hash, 20)  
             message = response.getReceipt(client).toString()
             print(f"[Contract] Set File Hash: {message}")
+            response = self.__transact_add_revoke_access(contract_id.toString(), "addAccess", account_id, 20)  
+            message = response.getReceipt(client).toString()
+            print(f"[Contract] Added Access For: {account_id}")
             self._fake_db.add_record(account_id, file_hash, contract_id.toString())
             return encrypted_file
         else:
@@ -217,3 +222,16 @@ class HederaModel():
         message = response.getReceipt(client).toString()
         print(f"[Contract] Revoked Access For: {account_id}")
         return True
+    
+    def decrypt_file(self, account_id, contract_id, input_file):
+        print('DECRYPT FILE')
+        account_list = self.list_access(contract_id)
+        print(f'ACCOUNT LIST" {account_list}')
+        if account_id in account_list:
+            # Encrypt here
+            sigil_cryptography = Encrypt()
+            print('DECRYPTING FILE')
+            decrypted_file = sigil_cryptography.decrypt_file(input_file)
+            return decrypted_file
+        else:
+            return False
