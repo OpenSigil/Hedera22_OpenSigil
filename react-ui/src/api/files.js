@@ -9,7 +9,7 @@ class FilesApi {
       headers: {
         'ACCOUNT-ID': '0.0.34729650',
         'PUBLIC-KEY': 'ForDemoPurposesOnly!',
-        'PRIVATE-KEY': ''
+        'PRIVATE-KEY': '302e020100300506032b65700422042018aa29bd84b80800870c1af61402b31f553eec9b2577f048a5556dace1b47cd3'
       }
     });
   };
