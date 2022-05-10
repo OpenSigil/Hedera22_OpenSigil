@@ -5,7 +5,7 @@ class FilesApi {
     let form = new FormData();
     form.append('data', file);
 
-    return axios.post(`${base}/hedera`, form, {
+    return axios.post(`${base}/hedera-encrypt`, form, {
       headers: {
         'ACCOUNT-ID': '0.0.34729650',
         'PUBLIC-KEY': 'ForDemoPurposesOnly!',
@@ -18,7 +18,10 @@ class FilesApi {
     let form = new FormData();
     form.append('data', file);
     
-    return axios.post(`${base}/decrypt`, form);
+    return axios.post(`${base}/hedera-decrypt`, form, {
+      'ACCOUNT-ID': '0.0.34729650',
+      'CONTRACT-ID': ''
+    });
   };
 }
 
