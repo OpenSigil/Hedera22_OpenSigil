@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useState, useRef } from "react";
 import { AiFillLock, AiFillUnlock } from "react-icons/ai";
+import { useHashConnect } from "../../auth-context/HashConnectProvider";
 
 import FilesApi from "../../api/files";
 
@@ -19,10 +20,11 @@ export default function Encryption() {
 
   const uploadRef = useRef(null);
   const downloadRef = useRef(null);
+  const { walletData } = useHashConnect();
 
   const onEncryptUpload = async (file)  => {
     console.log(file);
-    await FilesApi.Encrypt(file).then((response) => {
+    await FilesApi.Encrypt(file, walletData.accountIds[0]).then((response) => {
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
@@ -44,7 +46,7 @@ export default function Encryption() {
 
   const onDecryptUpload = async (file)  => {
     console.log(file);
-    await FilesApi.Decrypt(file).then((response) => {
+    await FilesApi.Decrypt(file, walletData.accountIds[0]).then((response) => {
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;

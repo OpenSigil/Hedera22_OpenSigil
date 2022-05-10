@@ -172,5 +172,6 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_HEADERS = list(default_headers) + [
     'ACCOUNT-ID',
     'PRIVATE-KEY',
-    'PUBLIC-KEY'
+    'PUBLIC-KEY',
+    'CONTRACT-ID'
 ]
