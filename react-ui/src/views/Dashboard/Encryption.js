@@ -9,16 +9,33 @@ import { AiFillLock, AiFillUnlock } from "react-icons/ai";
 import { useHashConnect } from "../../auth-context/HashConnectProvider";
 
 import FilesApi from "../../api/files";
+import { useToast } from "@chakra-ui/react";
 
 export default function Encryption() {
 
   const uploadRef = useRef(null);
   const downloadRef = useRef(null);
   const { walletData } = useHashConnect();
+  const toast = useToast({
+    position: "top"
+  });
 
   const onEncryptUpload = async (file)  => {
-    console.log(file);
+    toast({
+      title: "Uploading file..",
+      status: "info",
+      duration: 3000,
+      isClosable: true
+    });
+
     await FilesApi.Encrypt(file, walletData.accountIds[0]).then((response) => {
+      toast({
+        title: "File Encrypted!",
+        status: "success",
+        duration: 3000,
+        isClosable: true
+      });
+
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
@@ -35,12 +52,30 @@ export default function Encryption() {
   
       // Clean up and remove the link
       link.parentNode.removeChild(link);
+    }).catch(() => {
+      toast({
+        title: "File Encryption Error",
+        status: "error",
+        duration: 3000,
+        isClosable: true
+      });
     });
   };
 
   const onDecryptUpload = async (file)  => {
-    console.log(file);
+    toast({
+      title: "Uploading file..",
+      status: "info",
+      duration: 3000,
+      isClosable: true
+    });
     await FilesApi.Decrypt(file, walletData.accountIds[0]).then((response) => {
+      toast({
+        title: "File Decrypted!",
+        status: "success",
+        duration: 3000,
+        isClosable: true
+      });
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
@@ -57,6 +92,13 @@ export default function Encryption() {
   
       // Clean up and remove the link
       link.parentNode.removeChild(link);
+    }).catch(() => {
+      toast({
+        title: "Not Authorized For File",
+        status: "error",
+        duration: 3000,
+        isClosable: true
+      });
     });
   };
 
