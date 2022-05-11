@@ -3,25 +3,25 @@ import axios from "./index";
 class FilesApi {
   static Encrypt = (file, accountId) => {
     let form = new FormData();
-    form.append('data', file);
+    form.append("data", file);
 
     return axios.post(`${base}/hedera-encrypt`, form, {
       headers: {
-        'ACCOUNT-ID': accountId,
-        'PUBLIC-KEY': 'ForDemoPurposesOnly!',
-        'PRIVATE-KEY': '302e020100300506032b65700422042018aa29bd84b80800870c1af61402b31f553eec9b2577f048a5556dace1b47cd3'
+        "ACCOUNT-ID": accountId,
+        "PUBLIC-KEY": "ForDemoPurposesOnly!",
+        "PRIVATE-KEY": "302e020100300506032b65700422042018aa29bd84b80800870c1af61402b31f553eec9b2577f048a5556dace1b47cd3"
       }
     });
   };
 
   static Decrypt = (file, accountId) => {
     let form = new FormData();
-    form.append('data', file);
+    form.append("data", file);
     
     return axios.post(`${base}/hedera-decrypt`, form, {
       headers: {
-        'ACCOUNT-ID': accountId,
-        'CONTRACT-ID': '0.0.34730084'
+        "ACCOUNT-ID": accountId,
+        "CONTRACT-ID": "0.0.34730084"
       }
     });
   };
@@ -29,18 +29,18 @@ class FilesApi {
   static List = (accountId) => {
     return axios.post(`${base}/get-record`, null, {
       headers: {
-        'ACCOUNT-ID': accountId
+        "ACCOUNT-ID": accountId
       }
     });
-  }
+  };
 
-  static ListAccess = () => {
+  static ListAccess = (contractId) => {
     return axios.post(`${base}/list-access`, null, {
       headers: {
-        'CONTRACT-ID': '0.0.34730035'
+        "CONTRACT-ID": contractId
       }
     });
-  }
+  };
 }
 
 let base = "sigil";

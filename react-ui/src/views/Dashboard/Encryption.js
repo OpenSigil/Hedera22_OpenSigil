@@ -1,16 +1,10 @@
 // Chakra imports
 import {
   Box,
-  Button,
   FormControl,
-  FormLabel,
-  InputGroup,
-  InputLeftElement,
-  Input,
-  Icon,
   Text
 } from "@chakra-ui/react";
-import React, { useState, useRef } from "react";
+import React, { useRef } from "react";
 import { AiFillLock, AiFillUnlock } from "react-icons/ai";
 import { useHashConnect } from "../../auth-context/HashConnectProvider";
 
@@ -26,11 +20,11 @@ export default function Encryption() {
     console.log(file);
     await FilesApi.Encrypt(file, walletData.accountIds[0]).then((response) => {
       const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
       link.setAttribute(
-        'download',
-        file.name + '.enc',
+        "download",
+        file.name + ".enc",
       );
   
       // Append to html link element page
@@ -42,17 +36,17 @@ export default function Encryption() {
       // Clean up and remove the link
       link.parentNode.removeChild(link);
     });
-  }
+  };
 
   const onDecryptUpload = async (file)  => {
     console.log(file);
     await FilesApi.Decrypt(file, walletData.accountIds[0]).then((response) => {
       const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
       link.setAttribute(
-        'download',
-        file.name.replace('.enc', ''),
+        "download",
+        file.name.replace(".enc", ""),
       );
   
       // Append to html link element page
@@ -64,11 +58,11 @@ export default function Encryption() {
       // Clean up and remove the link
       link.parentNode.removeChild(link);
     });
-  }
+  };
 
   return (
-    <Box style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }} pt={{ base: "140px", md: "100px" }}>
-      <Box style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <Box style={{ display: "flex", flexDirection: "row", justifyContent: "center" }} pt={{ base: "140px", md: "100px" }}>
+      <Box style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
         <AiFillLock size={64}
           onClick={() => uploadRef.current.click()}
         />
@@ -76,14 +70,14 @@ export default function Encryption() {
           <input type='file'
               onChange={(e) => onEncryptUpload(e.target.files[0])}
               ref={uploadRef}
-              style={{display: 'none'}} />
-          <Box style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-            <Text fontSize={'xl'}>Encrypt</Text>
-            <Text fontSize={'xs'}>Encrypt a file.</Text>
+              style={{display: "none"}} />
+          <Box style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+            <Text fontSize={"xl"}>Encrypt</Text>
+            <Text fontSize={"xs"}>Encrypt a file.</Text>
           </Box>
         </FormControl>
       </Box>
-      <Box style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingLeft: '100px' }}>
+      <Box style={{ display: "flex", flexDirection: "column", alignItems: "center", paddingLeft: "100px" }}>
         <AiFillUnlock size={64}
           onClick={() => downloadRef.current.click()}
         />
@@ -91,10 +85,10 @@ export default function Encryption() {
           <input type='file'
               onChange={(e) => onDecryptUpload(e.target.files[0])}
               ref={downloadRef}
-              style={{display: 'none'}} />
-          <Box style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-            <Text fontSize={'xl'}>Decrypt</Text>
-            <Text fontSize={'xs'}>Decrypt a previously encrypted file.</Text>
+              style={{display: "none"}} />
+          <Box style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+            <Text fontSize={"xl"}>Decrypt</Text>
+            <Text fontSize={"xs"}>Decrypt a previously encrypted file.</Text>
           </Box>
         </FormControl>
       </Box>

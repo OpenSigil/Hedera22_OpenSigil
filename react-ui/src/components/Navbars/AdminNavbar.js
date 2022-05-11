@@ -15,13 +15,7 @@ import AdminNavbarLinks from "./AdminNavbarLinks";
 export default function AdminNavbar(props) {
   const [scrolled, setScrolled] = useState(false);
   const {
-    variant,
-    children,
-    fixed,
-    secondary,
     brandText,
-    onOpen,
-    ...rest
   } = props;
 
   // Here are all the props that may change depending on navbar's type or state.(secondary, variant, scrolled)

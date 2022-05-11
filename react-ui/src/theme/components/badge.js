@@ -1,5 +1,3 @@
-import { baseStyle } from "@chakra-ui/react";
-
 export const badgeStyles = {
     components: {
         Badge: {
@@ -15,4 +13,4 @@ export const badgeStyles = {
 
         }
     }
-}
+};

@@ -18,10 +18,10 @@ import BgSignUp from "assets/img/BgSignUp.png";
 import React, { useState } from "react";
 
 import AuthApi from "../../api/auth";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function SignUp() {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const titleColor = useColorModeValue("teal.300", "teal.200");
   const textColor = useColorModeValue("gray.700", "white");
@@ -57,7 +57,7 @@ function SignUp() {
         setButtonText("Sign up");
         return setError(response.data.msg);
       }
-      return history.push("/auth/signin");
+      return navigate("/auth/signin");
     } catch (err) {
       console.log(err);
       setButtonText("Sign up");

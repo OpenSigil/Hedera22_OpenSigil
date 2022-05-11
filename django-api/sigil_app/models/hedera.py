@@ -190,7 +190,7 @@ class HederaModel():
             response = self.__transact_add_revoke_access(contract_id.toString(), "addAccess", account_id, 20)  
             message = response.getReceipt(client).toString()
             print(f"[Contract] Added Access For: {account_id}")
-            self._fake_db.add_record(account_id, file_hash, contract_id.toString())
+            self._fake_db.add_record(account_id, file_hash, contract_id.toString(), input_file)
             return encrypted_file
         else:
             print("Account eval failed")

@@ -1,6 +1,5 @@
 // Chakra Imports
 import {
-  Box,
   Button,
   Drawer,
   DrawerBody,
@@ -13,17 +12,11 @@ import {
 } from "@chakra-ui/react";
 import { Separator } from "components/Separator/Separator";
 import PropTypes from "prop-types";
-import React, { useState } from "react";
+import React from "react";
 
 export default function Configurator(props) {
-  const { secondary, isOpen, onClose, fixed, ...rest } = props;
 
   const { colorMode, toggleColorMode } = useColorMode();
-  // Chakra Color Mode
-  let fixedDisplay = "flex";
-  if (props.secondary) {
-    fixedDisplay = "none";
-  }
 
   const settingsRef = React.useRef();
   return (

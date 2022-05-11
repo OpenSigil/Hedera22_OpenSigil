@@ -20,10 +20,7 @@ export const buttonStyles = {
           },
           _focus: {
             boxShadow: "none",
-          },
-          _hover: {
-            boxShadow: "none",
-          },
+          }
         },
       },
       baseStyle: {

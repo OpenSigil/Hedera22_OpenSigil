@@ -9,10 +9,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import {
-  DocumentIcon,
-  HomeIcon,
-  PersonIcon,
-  RocketIcon,
+  DocumentIcon
 } from "components/Icons/Icons";
 import { SidebarResponsive } from "components/Sidebar/Sidebar";
 import PropTypes from "prop-types";
@@ -20,15 +17,8 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import routes from "routes.js";
 export default function AuthNavbar(props) {
-  const [open, setOpen] = React.useState(false);
-  const handleDrawerToggle = () => {
-    setOpen(!open);
-  };
-  const { logo, logoText, secondary, ...rest } = props;
-  // verifies if routeName is the one active (in browser input)
-  const activeRoute = (routeName) => {
-    return window.location.href.indexOf(routeName) > -1 ? true : false;
-  };
+  const { logoText, ...rest } = props;
+
   // Chakra color mode
   let navbarIcon = useColorModeValue("gray.700", "gray.200");
   let mainText = useColorModeValue("gray.700", "gray.200");
@@ -49,12 +39,7 @@ export default function AuthNavbar(props) {
     "drop-shadow(0px 7px 23px rgba(0, 0, 0, 0.05))"
   );
   let navbarBackdrop = "blur(21px)";
-  let bgButton = useColorModeValue(
-    "linear-gradient(81.62deg, #313860 2.25%, #151928 79.87%)",
-    "gray.800"
-  );
   let navbarPosition = "fixed";
-  let colorButton = "white";
   if (props.secondary === true) {
     navbarIcon = "white";
     navbarBg = "none";
@@ -62,13 +47,12 @@ export default function AuthNavbar(props) {
     navbarShadow = "initial";
     navbarFilter = "initial";
     navbarBackdrop = "none";
-    bgButton = "white";
-    colorButton = "gray.700";
     mainText = "white";
     navbarPosition = "absolute";
   }
   var brand = (
     <Link
+      // eslint-disable-next-line no-undef
       href={`${process.env.PUBLIC_URL}/#/`}
       display="flex"
       lineHeight="100%"

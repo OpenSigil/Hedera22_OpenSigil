@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import { Spinner } from '@chakra-ui/react'
+import { Spinner } from "@chakra-ui/react";
 
 const INITIAL_SAVE_DATA = {
     topic: "",
@@ -146,7 +146,7 @@ export default function HashConnectProvider({
     if (!hasLoaded) {
         return (
             <Spinner />
-        )
+        );
     }
 
     return (
@@ -156,7 +156,7 @@ export default function HashConnectProvider({
           {children}
         </HashConnectAPIContext.Provider>
       );
-};
+}
 
 const defaultProps = {
     metaData: {

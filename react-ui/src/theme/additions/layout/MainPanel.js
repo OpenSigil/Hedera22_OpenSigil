@@ -11,7 +11,7 @@ const MainPanel = {
     transitionTimingFunction: "linear, linear, ease",
   },
   variants: {
-    main: (props) => ({
+    main: () => ({
       float: "right",
     })
   },

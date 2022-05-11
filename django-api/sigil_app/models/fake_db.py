@@ -10,6 +10,7 @@ rather than an actual DB solution (which is why we chose such a temporary soluti
 
 import json
 import os
+from datetime import datetime
 
 class FakeDb():
     FILE_PATH = 'resources/fake_db/data.json'
@@ -22,12 +23,24 @@ class FakeDb():
         with open(self.FILE_PATH, 'w', encoding='utf-8') as f:
             json.dump(db_state, f, ensure_ascii=False, indent=4)
 
-    def add_record(self, account_id, file_hash, contract_id):
+    def add_record(self, account_id, file_hash, contract_id, file):
         try:
             if account_id in self._database.keys():
-                self._database[account_id].append([file_hash, contract_id])
+                self._database[account_id].append({
+                    "fileHash": file_hash,
+                    "contractId": contract_id,
+                    "uploadedAt": datetime.now().isoformat(),
+                    "fileName": file.name,
+                    "fileSize": file.size
+                })
             else:
-                self._database[account_id] = [[file_hash, contract_id]]
+                self._database[account_id] = [{
+                    "fileHash": file_hash,
+                    "contractId": contract_id,
+                    "uploadedAt": datetime.now().isoformat(),
+                    "fileName": file.name,
+                    "fileSize": file.size
+                }]
             self.__save_state(self._database)
             return True
         except Exception as e:

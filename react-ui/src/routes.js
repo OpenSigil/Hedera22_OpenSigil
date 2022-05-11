@@ -1,14 +1,11 @@
 // import
 import Dashboard from "views/Dashboard/Dashboard.js";
 import Encryption from "views/Dashboard/Encryption";
-import MyFilesIPFS from "views/Dashboard/MyFilesIPFS";
-import Profile from "views/Dashboard/Profile.js";
 import SignIn from "views/Pages/SignIn.js";
 import SignOut from "views/Pages/SignOut.js";
 
 import {
   HomeIcon,
-  PersonIcon,
   DocumentIcon,
   RocketIcon
 } from "components/Icons/Icons";
@@ -24,15 +21,8 @@ var dashRoutes = [
   {
     path: "/encryption",
     name: "Encrypt & Decrypt",
-    icon: <HomeIcon color="inherit" />,
+    icon: <DocumentIcon color="inherit" />,
     component: Encryption,
-    layout: "/admin",
-  },
-  {
-    path: "/files",
-    name: "My Files",
-    icon: <HomeIcon color="inherit" />,
-    component: MyFilesIPFS,
     layout: "/admin",
   },
   {
