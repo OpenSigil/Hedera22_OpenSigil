@@ -26,7 +26,7 @@ class FilesApi {
     });
   };
 
-  static List = (accountId) => {
+  static ListFiles = (accountId) => {
     return axios.post(`${base}/get-record`, null, {
       headers: {
         "ACCOUNT-ID": accountId
@@ -38,6 +38,24 @@ class FilesApi {
     return axios.post(`${base}/list-access`, null, {
       headers: {
         "CONTRACT-ID": contractId
+      }
+    });
+  };
+
+  static AddAccess = (contractId, accountId) => {
+    return axios.post(`${base}/add-access`, null, {
+      headers: {
+        "CONTRACT-ID": contractId,
+        "ACCOUNT-ID": accountId
+      }
+    });
+  };
+
+  static RevokeAccess = (contractId, accountId) => {
+    return axios.post(`${base}/revoke-access`, null, {
+      headers: {
+        "CONTRACT-ID": contractId,
+        "ACCOUNT-ID": accountId
       }
     });
   };

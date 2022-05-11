@@ -1,6 +1,16 @@
 // Chakra imports
 import {
+  Box,
+  Button,
   Flex,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Spinner,
   Table,
   Tbody,
@@ -8,7 +18,8 @@ import {
   Text,
   Th,
   Thead,
-  Tr
+  Tr,
+  useDisclosure
 } from "@chakra-ui/react";
 import { useHashConnect } from "auth-context/HashConnectProvider";
 // Custom components
@@ -22,13 +33,24 @@ import { DateTime } from "luxon";
 export default function Dashboard() {
 
   const [files, setFiles] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
   const [hasLoaded, setHasLoaded] = useState(false);
   const { walletData } = useHashConnect();
+  const { onOpen, onClose } = useDisclosure();
+
+  const [addAccountId, setAddAccountId] = useState("");
+  const [revokeAccountId, setRevokeAccountId] = useState("");
 
   useEffect(() => {
     async function fetch() {
-      await FilesApi.List(walletData.accountIds[0]).then((response) => {
+      await FilesApi.ListFiles(walletData.accountIds[0]).then((response) => {
         setFiles(response.data.account_data);
+        if (response.data.account_data != null) {
+          setFiles(response.data.account_data);
+        }
+        else {
+          setHasLoaded(true);
+        }
       });
     }
 
@@ -88,56 +110,119 @@ export default function Dashboard() {
   }
 
   return (
-    <Flex flexDirection="column" pt={{ base: "120px", md: "75px" }}>
-      <Card p="16px" overflowX={{ sm: "scroll", xl: "hidden" }}>
-          <CardHeader p="12px 0px 28px 0px">
-            <Flex direction="column">
-              <Text
-                fontSize="lg"
-                fontWeight="bold"
-                pb=".5rem"
-              >
-                My Files
-              </Text>
-            </Flex>
-          </CardHeader>
-          <Table variant="simple" width="100%">
-            <Thead>
-              <Tr my=".8rem" ps="0px">
-                <Th color="gray.400">Edit</Th>
-                <Th color="gray.400">Name</Th>
-                <Th color="gray.400">Hash</Th>
-                <Th color="gray.400">Size</Th>
-                <Th color="gray.400">Uploaded</Th>
-                <Th color="gray.400">Access List</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {files.map((file) => {
-                  return (
-                    <Tr>
-                      <Td><SettingsIcon /></Td>
-                      <Td>
-                        {file.fileName}
-                      </Td>
-                      <Td>
-                        {file.fileHash}
-                      </Td>
-                      <Td>
-                        {humanFileSize(file.fileSize)}
-                      </Td>
-                      <Td>
-                        {DateTime.fromISO(file.uploadedAt).toLocaleString(DateTime.DATETIME_SHORT)}
-                      </Td>
-                      <Td>
-                        {file.accessList != null ? file.accessList.length : 0} Users
-                      </Td>
-                    </Tr>
-                  );
-                })}
-            </Tbody>
-          </Table>
-        </Card>
-    </Flex>
+    <>
+      {selectedFile != null && <Modal isOpen={selectedFile != null} onClose={onClose}>
+      <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>File Settings</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            {selectedFile?.accessList?.length > 0 && <Box>
+            <Text fontSize='2xl' fontWeight="bold">
+              Access List
+            </Text>
+            {selectedFile.accessList.map((accountId) => {
+              return (
+                <Text>
+                  {accountId}
+                </Text>
+              );
+            })}
+            </Box>}
+
+            <br />
+
+            <Text fontSize='2xl' fontWeight="bold">
+              Add Account Access
+            </Text>
+            <Input onInput={(e) => setAddAccountId(e.target.value)} placeholder='Account ID' />
+
+            <br />
+
+            <Text fontSize='2xl' fontWeight="bold">
+              Revoke Account Access
+            </Text>
+            <Input onInput={(e) => setRevokeAccountId(e.target.value)} placeholder='Account ID' />
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme='blue' mr={3} onClick={async () => {
+              if (addAccountId != "") {
+                await FilesApi.AddAccess(selectedFile.contractId, addAccountId);
+              }
+
+              if (revokeAccountId != "") {
+                await FilesApi.RevokeAccess(selectedFile.contractId, revokeAccountId);
+              }
+
+              setSelectedFile(null);
+
+              if (addAccountId != "" || revokeAccountId != "") {
+                window.location.reload();
+              }
+            }}
+            >
+              Save
+            </Button>
+            <Button variant='ghost' onClick={() => setSelectedFile(null)}>Cancel</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>}
+      <Flex flexDirection="column" pt={{ base: "120px", md: "75px" }}>
+        <Card p="16px" overflowX={{ sm: "scroll", xl: "hidden" }}>
+            <CardHeader p="12px 0px 28px 0px">
+              <Flex direction="column">
+                <Text
+                  fontSize="lg"
+                  fontWeight="bold"
+                  pb=".5rem"
+                >
+                  My Files
+                </Text>
+              </Flex>
+            </CardHeader>
+            {files == null ? "Nothing to display" : <Table variant="simple" width="100%">
+              <Thead>
+                <Tr my=".8rem" ps="0px">
+                  <Th color="gray.400">Edit</Th>
+                  <Th color="gray.400">Name</Th>
+                  <Th color="gray.400">Hash</Th>
+                  <Th color="gray.400">Size</Th>
+                  <Th color="gray.400">Uploaded</Th>
+                  <Th color="gray.400">Access List</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {files?.map((file) => {
+                    return (
+                      <Tr>
+                        <Td
+                          onClick={() => setSelectedFile(file) && onOpen()}
+                        >
+                          <SettingsIcon />
+                        </Td>
+                        <Td>
+                          {file.fileName}
+                        </Td>
+                        <Td>
+                          {file.fileHash}
+                        </Td>
+                        <Td>
+                          {humanFileSize(file.fileSize)}
+                        </Td>
+                        <Td>
+                          {DateTime.fromISO(file.uploadedAt).toLocaleString(DateTime.DATETIME_SHORT)}
+                        </Td>
+                        <Td>
+                          {file.accessList != null ? file.accessList.length - 1 : 0} Users
+                        </Td>
+                      </Tr>
+                    );
+                  })}
+              </Tbody>
+            </Table>}
+          </Card>
+      </Flex>
+    </>
   );
 }
