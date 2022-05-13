@@ -8,7 +8,6 @@ import os
 from cryptography.fernet import Fernet
 from django.db import models
 from django.conf import settings
-from django.http import HttpResponse
 
 class Encrypt():
     def __init__(self):
@@ -39,7 +38,6 @@ class Encrypt():
     
     def __decrypt_Fernet_GCM(self, token, secret_key):
         f = Fernet(secret_key)
-        token = token.read()
         try:
             plaintext = f.decrypt(token)
         except Exception as e:
@@ -52,47 +50,20 @@ class Encrypt():
         plaintext = self.__decrypt_Fernet_GCM(encrypted_msg, secret_key)
         return plaintext
 
-    def __load_file(self, input_file):
-        destination = open('tempfile', 'wb')
-        for chunk in input_file.chunks():
-            destination.write(chunk)
-        destination.close()
-        return(open("tempfile", "rb"))
-
-    def __write_file(self, input_file, output_file):
-        destination = open(output_file, 'wb')
-        destination.write(input_file)
-        return(open(output_file, "rb"))
-
     def encrypt_file(self, input_file):
-        file_obj = self.__load_file(input_file)
         _encryption_pub_key = int(self._private_key) * self._curve.g
-        encrypted_msg, decryption_pub_key = self.__encrypt_ECC(file_obj, _encryption_pub_key)
-        temp_file_path = 'encryptedfile'
-        self.__write_file(encrypted_msg, temp_file_path)
-        if os.path.exists(temp_file_path):
-            with open(temp_file_path, 'rb') as fh:
-                response = HttpResponse(fh.read(), content_type="application/octet-stream")
-                response['Content-Disposition'] = 'inline; filename=' + 'encryptedfile'
-                print(f'Response: {response}')
-                return (response, temp_file_path)
+        encrypted_msg = self.__encrypt_ECC(input_file, _encryption_pub_key)
+        return encrypted_msg[0]
     
     def decrypt_file(self, input_file):
-        file_obj = self.__load_file(input_file)
+        print(input_file)
         decryption_pub_key = ec.Point(self._curve, self._ecc_point_x, self._ecc_point_y)
-        decrypted_msg = self.__decrypt_ECC(file_obj, decryption_pub_key, self._private_key)
-        self.__write_file(decrypted_msg, 'decryptedfile')
-        if os.path.exists('decryptedfile'):
-            with open('decryptedfile', 'rb') as fh:
-                response = HttpResponse(fh.read(), content_type="application/octet-stream")
-                response['Content-Disposition'] = 'inline; filename=' + 'decryptedfile'
-                print(f'Response: {response}')
-                return response
+        print('test1')
+        decrypted_msg = self.__decrypt_ECC(input_file, decryption_pub_key, self._private_key)
+        print('test2')
+        return decrypted_msg
     
     def get_file_hash(self, input_file): 
         sha256_hash = hashlib.sha256()
-        with open(input_file,"rb") as f:
-            # Read and update hash string value in blocks of 4K
-            for byte_block in iter(lambda: f.read(4096),b""):
-                sha256_hash.update(byte_block)
+        sha256_hash.update(input_file)
         return sha256_hash.hexdigest()

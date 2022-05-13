@@ -3,6 +3,8 @@ from django.core.files.uploadhandler import TemporaryFileUploadHandler
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
+from sigil_app.models.fake_db import FakeDb
+from django.http import HttpResponse
 
 from sigil_app.models import HederaModel
 
@@ -12,12 +14,21 @@ class HederaEncryptViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         try:
             _hedera = HederaModel()
+            _fake_db = FakeDb()
+
             if request.method == 'POST':
-                return _hedera.encrypt_file(
+                encrypted_file, file_hash, contract_id = _hedera.encrypt_file(
                     account_id=request.headers['ACCOUNT-ID'],
                     public_key=request.headers['PUBLIC-KEY'],
                     private_key=request.headers['PRIVATE-KEY'],
                     input_file=request.FILES['data'])
+
+                file_name = request.FILES['data'].name
+                file_size = request.FILES['data'].size
+
+                _fake_db.add_record(request.headers['ACCOUNT-ID'], file_hash, contract_id, file_name, file_size, None)
+
+                return HttpResponse(encrypted_file, content_type="application/octet-stream")
             return Response(
                 {
                     "success": FALSE,
@@ -29,19 +40,19 @@ class HederaEncryptViewSet(viewsets.ModelViewSet):
             print(e)
 
 class HederaDecryptViewSet(viewsets.ModelViewSet):
-    print('DECRYPT VIEWSET')
     http_method_names = ["post"]
     permission_classes = (AllowAny,)
     def create(self, request, *args, **kwargs):
         try:
             _hedera = HederaModel()
             if request.method == 'POST':
-                print('DECRYPT FILE')
-                return _hedera.decrypt_file(
+                decrypted_file =  _hedera.decrypt_file(
                     account_id=request.headers['ACCOUNT-ID'],
                     contract_id=request.headers['CONTRACT-ID'],
                     input_file=request.FILES['data']
-                    )
+                )
+
+                return HttpResponse(decrypted_file, content_type="application/octet-stream")
             return Response(
                 {
                     "success": FALSE,

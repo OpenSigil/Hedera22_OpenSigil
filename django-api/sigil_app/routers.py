@@ -10,6 +10,8 @@ from sigil_app.viewsets import (
     HederaListViewSet,
     HederaAddViewSet,
     HederaRevokeViewSet,
+    IPFSUploadViewSet,
+    IPFSDownloadViewSet
 )
 
 router = routers.SimpleRouter(trailing_slash=False)
@@ -23,6 +25,10 @@ router.register(r"add-access", HederaAddViewSet, basename="hedera")
 router.register(r"revoke-access", HederaRevokeViewSet, basename="hedera")
 router.register(r"add-record", DbAddRecord, basename="db")
 router.register(r"get-record", DbReturnRecord, basename="db")
+
+# IPFS Routes
+router.register(r"upload", IPFSUploadViewSet, basename="db")
+router.register(r"download", IPFSDownloadViewSet, basename="db")
 
 urlpatterns = [
     *router.urls,

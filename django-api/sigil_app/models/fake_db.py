@@ -23,23 +23,25 @@ class FakeDb():
         with open(self.FILE_PATH, 'w', encoding='utf-8') as f:
             json.dump(db_state, f, ensure_ascii=False, indent=4)
 
-    def add_record(self, account_id, file_hash, contract_id, file):
+    def add_record(self, account_id, file_hash, contract_id, file_name, file_size, cid):
         try:
             if account_id in self._database.keys():
                 self._database[account_id].append({
                     "fileHash": file_hash,
                     "contractId": contract_id,
                     "uploadedAt": datetime.now().isoformat(),
-                    "fileName": file.name,
-                    "fileSize": file.size
+                    "fileName": file_name,
+                    "fileSize": file_size,
+                    "cid": cid
                 })
             else:
                 self._database[account_id] = [{
                     "fileHash": file_hash,
                     "contractId": contract_id,
                     "uploadedAt": datetime.now().isoformat(),
-                    "fileName": file.name,
-                    "fileSize": file.size
+                    "fileName": file_name,
+                    "fileSize": file_size,
+                    "cid": cid
                 }]
             self.__save_state(self._database)
             return True
@@ -50,4 +52,14 @@ class FakeDb():
     def return_record(self, account_id):
         if account_id in self._database.keys():
             return self._database[account_id]
+        return None
+    
+    def get_cid_from_contract_id(self, contract_id):
+        for key in self._database.keys():
+            files = self._database[key]
+
+            for file in files:
+                if file['contractId'] == contract_id:
+                    return file['cid']
+
         return None

@@ -7,3 +7,5 @@ from .hedera import HederaAddViewSet
 from .hedera import HederaRevokeViewSet
 from .db import DbAddRecord
 from .db import DbReturnRecord
+from .ipfs import IPFSUploadViewSet
+from .ipfs import IPFSDownloadViewSet

@@ -3,10 +3,7 @@ import math
 import os
 from traceback import print_tb
 
-from cryptography.fernet import Fernet
-from django.db import models
 from django.conf import settings
-from django.http import HttpResponse
 from hedera import (
     AccountId,
     Client,
@@ -180,9 +177,9 @@ class HederaModel():
             print(f"Set Contract Owner")
             # Encrypt here
             sigil_cryptography = Encrypt()
-            encrypted_file, temp_file_path = sigil_cryptography.encrypt_file(input_file)
+            encrypted_file = sigil_cryptography.encrypt_file(input_file)
             print("Encrypted file")
-            file_hash = sigil_cryptography.get_file_hash(temp_file_path)
+            file_hash = sigil_cryptography.get_file_hash(encrypted_file)
             print(f"Encrypted file hash: {file_hash}")
             response = self.__transact_set_file_hash(contract_id, file_hash, 20)  
             message = response.getReceipt(client).toString()
@@ -190,8 +187,7 @@ class HederaModel():
             response = self.__transact_add_revoke_access(contract_id.toString(), "addAccess", account_id, 20)  
             message = response.getReceipt(client).toString()
             print(f"[Contract] Added Access For: {account_id}")
-            self._fake_db.add_record(account_id, file_hash, contract_id.toString(), input_file)
-            return encrypted_file
+            return (encrypted_file, file_hash, contract_id.toString())
         else:
             print("Account eval failed")
             return None
@@ -227,6 +223,16 @@ class HederaModel():
         print('DECRYPT FILE')
         account_list = self.list_access(contract_id)
         print(f'ACCOUNT LIST" {account_list}')
+
+        if type(input_file) == str:
+            input_file = bytes(input_file, 'utf-8')
+        else:
+            input_file = input_file.read()
+
+        print(input_file)
+
+        print(account_list)
+
         if account_id in account_list:
             # Encrypt here
             sigil_cryptography = Encrypt()

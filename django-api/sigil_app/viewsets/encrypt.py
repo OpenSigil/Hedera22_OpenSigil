@@ -11,6 +11,7 @@ class EncryptViewSet(viewsets.ModelViewSet):
     http_method_names = ["post"]
     permission_classes = (AllowAny,)
     def create(self, request, *args, **kwargs):
+        print('test12')
         self._encrypt_model = Encrypt()
         if request.method == 'POST':
             try:

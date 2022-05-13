@@ -5,3 +5,4 @@ django-cors-headers==3.7.0
 hedera-sdk-py
 PyJWT==2.1.0
 tinyec
+requests
