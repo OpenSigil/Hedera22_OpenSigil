@@ -1,6 +1,5 @@
 // import
 import Dashboard from "views/Dashboard/Dashboard.js";
-import Encryption from "views/Dashboard/Encryption";
 import SignIn from "views/Pages/SignIn.js";
 import SignOut from "views/Pages/SignOut.js";
 
@@ -16,13 +15,6 @@ var dashRoutes = [
     name: "Dashboard",
     icon: <HomeIcon color="inherit" />,
     component: Dashboard,
-    layout: "/admin",
-  },
-  {
-    path: "/encryption",
-    name: "Encrypt & Decrypt",
-    icon: <DocumentIcon color="inherit" />,
-    component: Encryption,
     layout: "/admin",
   },
   {

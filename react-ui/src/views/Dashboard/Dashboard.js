@@ -242,6 +242,46 @@ export default function Dashboard() {
     });
   };
 
+  const onDecrypt = async (file)  => {
+    toast({
+      title: "Uploading file..",
+      status: "info",
+      duration: 3000,
+      isClosable: true
+    });
+    await FilesApi.Decrypt(file, walletData.accountIds[0]).then((response) => {
+      toast({
+        title: "File Decrypted!",
+        status: "success",
+        duration: 3000,
+        isClosable: true
+      });
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute(
+        "download",
+        file.name.replace(".enc", ""),
+      );
+  
+      // Append to html link element page
+      document.body.appendChild(link);
+  
+      // Start download
+      link.click();
+  
+      // Clean up and remove the link
+      link.parentNode.removeChild(link);
+    }).catch(() => {
+      toast({
+        title: "Not Authorized For File",
+        status: "error",
+        duration: 3000,
+        isClosable: true
+      });
+    });
+  };
+
   return (
     <>
       {selectedFile != null && <Modal isOpen={isEditOpen} onClose={onEditClose}>
@@ -337,12 +377,15 @@ export default function Dashboard() {
             })}
             </Box>}
 
+            <br />
+
             <Text fontSize='2xl' fontWeight="bold">
               File Hash
             </Text>
             <Text>
               {selectedFile.fileHash}
             </Text>
+            <br />
             {selectedFile.cid && <Box>
               <Text fontSize='2xl' fontWeight="bold">
               Web3 CID
@@ -354,33 +397,16 @@ export default function Dashboard() {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={async () => {
-              if (addAccountId != "") {
-                await FilesApi.AddAccess(selectedFile.contractId, addAccountId);
-              }
-
-              if (revokeAccountId != "") {
-                await FilesApi.RevokeAccess(selectedFile.contractId, revokeAccountId);
-              }
-
-              toast({
-                title: "Updated Access",
-                status: "success",
-                duration: 2000,
-                isClosable: true
-              });
-
-              setSelectedFile(null);
-
-              if (addAccountId != "" || revokeAccountId != "") {
-                setHasLoadedAccess(false);
-                await loadFiles();
-              }
-            }}
+            <Button 
+              colorScheme='blue' 
+              mr={3} 
+              onClick={() => {
+                setSelectedFile(null);
+                onViewClose();
+              }}
             >
-              Save
+              Close
             </Button>
-            <Button variant='ghost' onClick={onViewClose}>Cancel</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>}
@@ -388,7 +414,7 @@ export default function Dashboard() {
       <Modal isOpen={isUploadOpen} onClose={onUploadClose}>
       <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Upload File</ModalHeader>
+          <ModalHeader>Encrypt File</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Flex flexDirection='column'>
@@ -468,7 +494,17 @@ export default function Dashboard() {
                   <Button
                     onClick={onUploadOpen}
                   >
-                    Upload
+                    Encrypt
+                  </Button>
+                  <input type='file'
+                    onChange={(e) => onDecrypt(e.target.files[0])}
+                    ref={uploadRef}
+                    style={{display: "none"}} />
+                  <Button
+                    style={{ marginLeft: "15px" }}
+                    onClick={() => uploadRef.current.click()}
+                  >
+                    Decrypt
                   </Button>
                 </Flex>
               </Flex>
