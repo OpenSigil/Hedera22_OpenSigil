@@ -229,10 +229,6 @@ class HederaModel():
         else:
             input_file = input_file.read()
 
-        print(input_file)
-
-        print(account_list)
-
         if account_id in account_list:
             # Encrypt here
             sigil_cryptography = Encrypt()

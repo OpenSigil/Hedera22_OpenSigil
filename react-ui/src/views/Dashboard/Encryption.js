@@ -28,7 +28,7 @@ export default function Encryption() {
       isClosable: true
     });
 
-    await FilesApi.Encrypt(file, walletData.accountIds[0]).then((response) => {
+    await FilesApi.Upload(file, walletData.accountIds[0], false).then((response) => {
       toast({
         title: "File Encrypted!",
         status: "success",
