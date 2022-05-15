@@ -167,6 +167,7 @@ ECC_POINT_X = os.environ.get("ECC_POINT_X")
 ECC_POINT_Y = os.environ.get("ECC_POINT_Y")
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+WEB3_API_KEY = os.environ.get("WEB3_API_KEY")
 
 # CORS SETTINGS
 CORS_ORIGIN_ALLOW_ALL = True

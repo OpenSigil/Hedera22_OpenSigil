@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import axios from "./index";
 
 class FilesApi {
@@ -9,8 +10,8 @@ class FilesApi {
       return axios.post(`${base}/upload`, form, {
         headers: {
           "ACCOUNT-ID": accountId,
-          "PUBLIC-KEY": "ForDemoPurposesOnly!",
-          "PRIVATE-KEY": "302e020100300506032b65700422042018aa29bd84b80800870c1af61402b31f553eec9b2577f048a5556dace1b47cd3"
+          "PUBLIC-KEY": process.env.REACT_APP_ADMIN_PUBLIC_KEY,
+          "PRIVATE-KEY": process.env.REACT_APP_ADMIN_PRIVATE_KEY
         },
         responseType: "arraybuffer"
       });
@@ -19,8 +20,8 @@ class FilesApi {
       return axios.post(`${base}/hedera-encrypt`, form, {
         headers: {
           "ACCOUNT-ID": accountId,
-          "PUBLIC-KEY": "ForDemoPurposesOnly!",
-          "PRIVATE-KEY": "302e020100300506032b65700422042018aa29bd84b80800870c1af61402b31f553eec9b2577f048a5556dace1b47cd3"
+          "PUBLIC-KEY": process.env.REACT_APP_ADMIN_PUBLIC_KEY,
+          "PRIVATE-KEY": process.env.REACT_APP_ADMIN_PRIVATE_KEY
         },
         responseType: "arraybuffer"
       });
@@ -32,8 +33,8 @@ class FilesApi {
       headers: {
         "ACCOUNT-ID": accountId,
         "CONTRACT-ID": contractId,
-        "PUBLIC-KEY": "ForDemoPurposesOnly!",
-        "PRIVATE-KEY": "302e020100300506032b65700422042018aa29bd84b80800870c1af61402b31f553eec9b2577f048a5556dace1b47cd3"
+        "PUBLIC-KEY": process.env.REACT_APP_ADMIN_PUBLIC_KEY,
+          "PRIVATE-KEY": process.env.REACT_APP_ADMIN_PRIVATE_KEY
       },
       responseType: "arraybuffer"
     });

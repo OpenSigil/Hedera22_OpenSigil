@@ -130,3 +130,6 @@ dmypy.json
 
 # Credentials
 client-config.json
+
+
+.env.development.local

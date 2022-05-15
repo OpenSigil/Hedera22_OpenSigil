@@ -7,6 +7,7 @@ from django.http import HttpResponse
 import requests
 from api.file.models import File
 from datetime import datetime
+from django.conf import settings
 
 from sigil_app.models import HederaModel
 
@@ -31,7 +32,7 @@ class IPFSUploadViewSet(viewsets.ModelViewSet):
                 file_size = request.FILES['data'].size
 
                 response = requests.post('https://api.web3.storage/upload', data=encrypted_file, headers={
-                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweEY0NjdiM0VmNWIyMWE4YUVCNDQ0QmQzOTYyZmMzZUI4OGJkOWU4ZkQiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NTEwMTYyODY2MTUsIm5hbWUiOiJvcGVuc2lnaWwifQ.34hfUxJOEyOrkY-i1VjGLNxl-zRBi1FcejT150SJ_mc'
+                    'Authorization': 'Bearer {}'.format(settings.WEB3_API_KEY)
                 })
 
                 cid = response.json()['cid']
