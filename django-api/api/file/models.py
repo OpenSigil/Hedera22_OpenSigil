@@ -7,4 +7,4 @@ class File(models.Model):
     updated_at = models.CharField(db_index=True, max_length=255)
     file_name = models.CharField(db_index=True, max_length=255)
     file_size = models.CharField(db_index=True, max_length=255)
-    cid = models.CharField(db_index=True, max_length=255)    
+    cid = models.CharField(db_index=True, max_length=255, null=True)    

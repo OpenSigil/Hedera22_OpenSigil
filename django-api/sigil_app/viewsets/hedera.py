@@ -1,11 +1,12 @@
 from pickle import FALSE, TRUE
-from django.core.files.uploadhandler import TemporaryFileUploadHandler
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from django.http import HttpResponse
 
 from sigil_app.models import HederaModel
+from api.file.models import File
+from datetime import datetime
 
 class HederaEncryptViewSet(viewsets.ModelViewSet):
     http_method_names = ["post"]
@@ -24,7 +25,17 @@ class HederaEncryptViewSet(viewsets.ModelViewSet):
                 file_name = request.FILES['data'].name
                 file_size = request.FILES['data'].size
 
-                _fake_db.add_record(request.headers['ACCOUNT-ID'], file_hash, contract_id, file_name, file_size, None)
+                f = File(
+                    file_hash=file_hash, 
+                    contract_id=contract_id, 
+                    owner_account_id=request.headers['ACCOUNT-ID'],
+                    updated_at=datetime.now().isoformat(), 
+                    file_name=file_name, 
+                    file_size=file_size, 
+                    cid=None
+                )
+                
+                f.save()
 
                 return HttpResponse(encrypted_file, content_type="application/octet-stream")
             return Response(
