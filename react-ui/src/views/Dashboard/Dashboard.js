@@ -418,7 +418,9 @@ export default function Dashboard() {
           <ModalCloseButton />
           <ModalBody>
             <Flex flexDirection='column'>
-              <input type='file'
+              <input 
+                id='upload-input'
+                type='file'
                 ref={uploadRef}
                 style={{display: "none"}} 
                 onChange={(e) => {
@@ -427,6 +429,19 @@ export default function Dashboard() {
                   var filename = fullPath.substring(startIndex);
                   if (filename.indexOf("\\") === 0 || filename.indexOf("/") === 0) {
                       filename = filename.substring(1);
+                  }
+
+                  if (e.target.files[0].size >= (1000*1000*100)) {
+                    toast({
+                      title: "Files above 100MB are currently not supported.",
+                      status: "error",
+                      duration: 3000,
+                      isClosable: true
+                    });
+
+                    e.target.value = null;
+                    setFileUploaded(null);
+                    return;
                   }
 
                   setFileUploaded(filename);
@@ -521,9 +536,7 @@ export default function Dashboard() {
                 </Tr>
               </Thead>
               <Tbody>
-                {console.log(files)}
                 {files?.map((file) => {
-                  console.log(file);
                     return (
                       <Tr>
                         <Td
