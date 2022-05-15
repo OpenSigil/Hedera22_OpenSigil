@@ -19,7 +19,6 @@ from hedera import (
     )
 
 from sigil_app.models.encrypt import Encrypt
-from sigil_app.models.fake_db import FakeDb
 from common.get_client import client, OPERATOR_ID, OPERATOR_KEY
 
 CONTRACT_PATH = '../../resources/contracts/compiled/sigil_contract.json'
@@ -28,7 +27,6 @@ class HederaModel():
     def __init__(self):
         try:
             self._wallet_keys = self.__gen_new_cred()
-            self._fake_db = FakeDb()
         except Exception as e:
             print(e)
             raise Exception(e)

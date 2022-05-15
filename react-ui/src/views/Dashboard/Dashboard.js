@@ -521,7 +521,9 @@ export default function Dashboard() {
                 </Tr>
               </Thead>
               <Tbody>
+                {console.log(files)}
                 {files?.map((file) => {
+                  console.log(file);
                     return (
                       <Tr>
                         <Td

@@ -3,7 +3,6 @@ from django.core.files.uploadhandler import TemporaryFileUploadHandler
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
-from sigil_app.models.fake_db import FakeDb
 from django.http import HttpResponse
 
 from sigil_app.models import HederaModel
@@ -14,7 +13,6 @@ class HederaEncryptViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         try:
             _hedera = HederaModel()
-            _fake_db = FakeDb()
 
             if request.method == 'POST':
                 encrypted_file, file_hash, contract_id = _hedera.encrypt_file(

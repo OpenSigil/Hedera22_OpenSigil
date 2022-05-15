@@ -3,9 +3,10 @@ from django.core.files.uploadhandler import TemporaryFileUploadHandler
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
-from sigil_app.models.fake_db import FakeDb
 from django.http import HttpResponse
 import requests
+from api.file.models import File
+from datetime import datetime
 
 from sigil_app.models import HederaModel
 
@@ -16,7 +17,7 @@ class IPFSUploadViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         try:
             _hedera = HederaModel()
-            _fake_db = FakeDb()
+
             if request.method == 'POST':
                 print('test')
 
@@ -35,7 +36,17 @@ class IPFSUploadViewSet(viewsets.ModelViewSet):
 
                 cid = response.json()['cid']
 
-                _fake_db.add_record(request.headers['ACCOUNT-ID'], file_hash, contract_id, file_name, file_size, cid)
+                f = File(
+                    file_hash=file_hash, 
+                    contract_id=contract_id, 
+                    owner_account_id=request.headers['ACCOUNT-ID'],
+                    updated_at=datetime.now().isoformat(), 
+                    file_name=file_name, 
+                    file_size=file_size, 
+                    cid=cid
+                )
+                
+                f.save()
 
                 return Response(
                     {
@@ -62,13 +73,12 @@ class IPFSDownloadViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         try:
             _hedera = HederaModel()
-            _fake_db = FakeDb()
             if request.method == 'POST':
                 account_id = request.headers['ACCOUNT-ID']
                 contract_id = request.headers['CONTRACT-ID']
 
                 # Get CID from the above info
-                cid = _fake_db.get_cid_from_contract_id(contract_id)
+                cid = File.objects.filter(contract_id=contract_id)[0].cid
 
                 # Get file here
                 response = requests.get('https://{}.ipfs.dweb.link/'.format(cid))

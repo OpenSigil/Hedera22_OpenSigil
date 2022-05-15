@@ -4,14 +4,13 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 
-from sigil_app.models import FakeDb
+from api.file.models import File
 
 class DbAddRecord(viewsets.ModelViewSet):
     http_method_names = ["post"]
     permission_classes = (AllowAny,)
 
     def create(self, request, *args, **kwargs):
-        _fake_db = FakeDb()
         if request.method == 'POST':
             if _fake_db.add_record(
                 account_id=request.headers['ACCOUNT-ID'],
@@ -37,13 +36,26 @@ class DbReturnRecord(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
 
     def create(self, request, *args, **kwargs):
-        _fake_db = FakeDb()
         if request.method == 'POST':
+            files = File.objects.filter(owner_account_id=request.headers['ACCOUNT-ID'])
+
+            response = []
+
+            for file in files:
+                response.append({
+                    "cid": file.cid,
+                    "fileHash": file.file_hash,
+                    "contractId": file.contract_id,
+                    "fileSize": file.file_size,
+                    "fileName": file.file_name,
+                    "uploadedAt": file.updated_at,
+                })
+                
             return Response(
                 {
                     "success": FALSE,
                     "msg": "Record query succeeded!",
-                    "account_data": _fake_db.return_record(account_id=request.headers['ACCOUNT-ID'])
+                    "account_data": response
                 },
                 status=status.HTTP_200_OK,
             )

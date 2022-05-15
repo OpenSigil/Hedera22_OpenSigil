@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "api",
     "api.user",
+    "api.file",
     "api.authentication",
 ]
 

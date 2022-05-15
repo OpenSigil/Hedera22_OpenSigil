@@ -28,14 +28,7 @@ export default function Footer(props) {
         mb={{ base: "20px", xl: "0px" }}
       >
         &copy; {1900 + new Date().getYear()},{" "}
-        <Link
-          // color={linkTeal}
-          color="teal.400"
-          href="https://bit.ly/3fKQZaL"
-          target="_blank"
-        >
-          {"OpenSigil"}
-        </Link>
+        OpenSigil
       </Text>
     </Flex>
   );
