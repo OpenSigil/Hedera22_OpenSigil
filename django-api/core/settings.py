@@ -43,9 +43,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "rest_framework",
     "api",
-    "api.user",
     "api.file",
-    "api.authentication",
 ]
 
 MIDDLEWARE = [
@@ -134,16 +132,11 @@ STATIC_URL = "/static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-AUTH_USER_MODEL = "api_user.User"
-
 # ##################################################################### #
 # ################### REST FRAMEWORK             ###################### #
 # ##################################################################### #
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "api.authentication.backends.ActiveSessionAuthentication",
-    ),
     "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
 }
 
