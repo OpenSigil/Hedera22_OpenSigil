@@ -53,6 +53,7 @@ class HederaDecryptViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
     def create(self, request, *args, **kwargs):
         try:
+            '''
             _hedera = HederaModel()
             if request.method == 'POST':
                 decrypted_file =  _hedera.decrypt_file(
@@ -62,12 +63,13 @@ class HederaDecryptViewSet(viewsets.ModelViewSet):
                 )
 
                 return HttpResponse(decrypted_file, content_type="application/octet-stream")
+            '''
             return Response(
                 {
                     "success": FALSE,
                     "msg": "File upload failed!",
                 },
-                status=status.HTTP_200_OK,
+                status=status.HTTP_400_BAD_REQUEST,
             )
         except Exception as e:
             print(e)
