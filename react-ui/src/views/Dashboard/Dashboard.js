@@ -337,8 +337,11 @@ export default function Dashboard() {
 
               setSelectedFile(null);
 
-              if (addAccountId != "" || revokeAccountId != "") {
-                window.location.reload();
+              if (addAccountId != "" || revokeAccountId != "") {\
+                setAddAccountId("");
+                setRevokeAccountId("");
+                setHasLoadedAccess(false);
+                await loadFiles();
               }
             }}
             >
