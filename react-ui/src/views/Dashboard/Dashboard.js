@@ -338,8 +338,7 @@ export default function Dashboard() {
               setSelectedFile(null);
 
               if (addAccountId != "" || revokeAccountId != "") {
-                setHasLoadedAccess(false);
-                await loadFiles();
+                window.location.reload();
               }
             }}
             >
