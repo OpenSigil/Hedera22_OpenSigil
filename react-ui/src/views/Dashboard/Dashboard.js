@@ -337,7 +337,7 @@ export default function Dashboard() {
 
               setSelectedFile(null);
 
-              if (addAccountId != "" || revokeAccountId != "") {\
+              if (addAccountId != "" || revokeAccountId != "") {
                 setAddAccountId("");
                 setRevokeAccountId("");
                 setHasLoadedAccess(false);
