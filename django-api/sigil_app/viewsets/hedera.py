@@ -43,7 +43,7 @@ class HederaEncryptViewSet(viewsets.ModelViewSet):
                     "success": FALSE,
                     "msg": "File upload failed!",
                 },
-                status=status.HTTP_200_OK,
+                status=status.HTTP_401_UNAUTHORIZED,
             )
         except Exception as e:
             print(e)
@@ -67,7 +67,7 @@ class HederaDecryptViewSet(viewsets.ModelViewSet):
                     "success": FALSE,
                     "msg": "File upload failed!",
                 },
-                status=status.HTTP_200_OK,
+                status=status.HTTP_401_UNAUTHORIZED,
             )
         except Exception as e:
             print(e)
@@ -94,7 +94,7 @@ class HederaListViewSet(viewsets.ModelViewSet):
                 "msg": "Smart contract query failed!",
                 "access_list": None
             },
-            status=status.HTTP_200_OK,
+            status=status.HTTP_400_BAD_REQUEST,
         )
 
 class HederaAddViewSet(viewsets.ModelViewSet):
@@ -119,7 +119,7 @@ class HederaAddViewSet(viewsets.ModelViewSet):
                 "success": FALSE,
                 "msg": "Smart contract query failed!",
             },
-            status=status.HTTP_200_OK,
+            status=status.HTTP_400_BAD_REQUEST,
         )
 
 class HederaRevokeViewSet(viewsets.ModelViewSet):
@@ -144,5 +144,5 @@ class HederaRevokeViewSet(viewsets.ModelViewSet):
                 "success": FALSE,
                 "msg": "Smart contract query failed!",
             },
-            status=status.HTTP_200_OK,
+            status=status.HTTP_400_BAD_REQUEST,
         )
