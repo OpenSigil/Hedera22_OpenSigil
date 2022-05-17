@@ -142,7 +142,7 @@ class HederaAddViewSet(viewsets.ModelViewSet):
         if request.method == 'POST':
             files = File.objects.filter(contract_id=request.headers['CONTRACT-ID'])
 
-            if len(files == 0):
+            if len(files) == 0:
                 return Response(
                     {
                         "success": FALSE,
@@ -197,7 +197,7 @@ class HederaRevokeViewSet(viewsets.ModelViewSet):
             try:
                 files = File.objects.filter(contract_id=request.headers['CONTRACT-ID'])
 
-                if len(files == 0):
+                if len(files) == 0:
                     return Response(
                         {
                             "success": FALSE,
