@@ -249,7 +249,8 @@ export default function Dashboard() {
       duration: 3000,
       isClosable: true
     });
-    await FilesApi.Decrypt(file, walletData.accountIds[0]).then((response) => {
+    // get contract id here by searching db for filehash
+    await FilesApi.Decrypt(file, walletData.accountIds[0], contractId).then((response) => {
       toast({
         title: "File Decrypted!",
         status: "success",

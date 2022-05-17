@@ -40,14 +40,14 @@ class FilesApi {
     });
   };
 
-  static Decrypt = (file, accountId) => {
+  static Decrypt = (file, accountId, contractId) => {
     let form = new FormData();
     form.append("data", file);
     
     return axios.post(`${base}/hedera-decrypt`, form, {
       headers: {
         "ACCOUNT-ID": accountId,
-        "CONTRACT-ID": "0.0.34730084"
+        "CONTRACT-ID": contractId
       },
       responseType: "arraybuffer"
     });
