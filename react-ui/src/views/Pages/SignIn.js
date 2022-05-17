@@ -17,16 +17,24 @@ import { useHashConnect } from "../../auth-context/HashConnectProvider";
 
 const FAQ_CATEGORIES = [
   {
-    title: "How is OpenSigil different than other file hosting sites?",
-    contents: "Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passage is attributed to an unknown typesetter in the 15th century who is thought to have scrambled parts of Cicero's De Finibus Bonorum et Malorum for use in a type specimen book. "
+    title: "How do I use OpenSigil?",
+    contents: "You'll need the Google Chrome Browser (https://www.google.com/chrome/downloads/) and the Hashpack wallet extension (https://chrome.google.com/webstore/detail/hashpack/gjagmgiddbbciopjhllkdnddhcglnemk). Once those are installed and you'll need to reload the page, click the 'Connect' button, and a TESTNET Hashpack wallet."
   },
   {
     title: "Who can use OpenSigil?",
-    contents: "Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passage is attributed to an unknown typesetter in the 15th century who is thought to have scrambled parts of Cicero's De Finibus Bonorum et Malorum for use in a type specimen book. "
+    contents: "Anyone with the requirements listed above!"
   },
   {
-    title: "How do I use OpenSigil?",
-    contents: "Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passage is attributed to an unknown typesetter in the 15th century who is thought to have scrambled parts of Cicero's De Finibus Bonorum et Malorum for use in a type specimen book. "
+    title: "How secure is OpenSigil?",
+    contents: "While we tried our best to make this application as secure as possible, this is only a demonstration of our application and it's features. We cannot guarantee completely secure file exchange at this time. Please do not send actual confidential information, or use anything besides disposable testnet wallets."
+  },
+  {
+    title: "When will OpenSigil be out of beta?",
+    contents: "We cant say for sure quite yet, we have to pause development until the judging is completed at the end of May. We're still several weeks away from a Mainnet release which will be with just a subset of beta users. But stay tuned for more information coming soon!"
+  },
+  {
+    title: "Where can I find out more?",
+    contents: "The source code, and more information can be found at (https://github.com/OpenSigil/Hedera22_OpenSigil). And more information about our hackathon submission can be found at (https://devpost.com/software/opensigil)"
   }
 ];
 
