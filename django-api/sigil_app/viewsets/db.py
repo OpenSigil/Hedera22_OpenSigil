@@ -38,28 +38,12 @@ class DbReturnRecord(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         if request.method == 'POST':
-            files = File.objects.filter(owner_account_id=request.headers['ACCOUNT-ID'])
+            try:
+                files = File.objects.filter(owner_account_id=request.headers['ACCOUNT-ID'])
 
-            response = []
+                response = []
 
-            for file in files:
-                response.append({
-                    "cid": file.cid,
-                    "fileHash": file.file_hash,
-                    "contractId": file.contract_id,
-                    "fileSize": file.file_size,
-                    "fileName": file.file_name,
-                    "uploadedAt": file.updated_at,
-                })
-
-            # Get files granted access to
-
-            access_list = FileAccess.objects.filter(account_id=request.headers['ACCOUNT-ID'])
-
-            for access in access_list:
-                file = File.objects.filter(contract_id=access.contract_id)
-
-                if file != None:
+                for file in files:
                     response.append({
                         "cid": file.cid,
                         "fileHash": file.file_hash,
@@ -68,6 +52,25 @@ class DbReturnRecord(viewsets.ModelViewSet):
                         "fileName": file.file_name,
                         "uploadedAt": file.updated_at,
                     })
+
+                # Get files granted access to
+
+                access_list = FileAccess.objects.filter(account_id=request.headers['ACCOUNT-ID'])
+
+                for access in access_list:
+                    file = File.objects.filter(contract_id=access.contract_id)
+
+                    if file != None:
+                        response.append({
+                            "cid": file.cid,
+                            "fileHash": file.file_hash,
+                            "contractId": file.contract_id,
+                            "fileSize": file.file_size,
+                            "fileName": file.file_name,
+                            "uploadedAt": file.updated_at,
+                        })
+            except Exception as e:
+                print(e)
                 
             return Response(
                 {

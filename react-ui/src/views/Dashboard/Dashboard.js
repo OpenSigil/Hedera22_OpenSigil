@@ -599,7 +599,7 @@ export default function Dashboard() {
                           {DateTime.fromISO(file.uploadedAt).toLocaleString(DateTime.DATETIME_SHORT)}
                         </Td>
                         <Td>
-                          {file.accessList != null ? file.accessList.length - 1 : 0} Users
+                          {file.accessList != null ? file.accessList.length : 0} Users
                         </Td>
                       </Tr>
                     );
