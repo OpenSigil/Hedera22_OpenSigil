@@ -87,6 +87,6 @@ class FilesApi {
   };
 }
 
-let base = "https://opensigil.com/api/sigil";
+let base = "sigil";
 
 export default FilesApi;

@@ -6,6 +6,7 @@ from django.http import HttpResponse
 
 from sigil_app.models import HederaModel
 from api.file.models import File
+from api.fileaccess.models import FileAccess
 from datetime import datetime
 from sigil_app.models.encrypt import Encrypt
 
@@ -109,13 +110,18 @@ class HederaListViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         _hedera = HederaModel()
         if request.method == 'POST':
+            access_list = FileAccess.objects.filter(contract_id=request.headers['CONTRACT-ID'])
+
+            response = []
+
+            for access in access_list:
+                response.append(access.account_id)
+            
             return Response(
                 {
                     "success": TRUE,
                     "msg": "Smart contract query succeeded!",
-                    "access_list": _hedera.list_access(
-                        contract_id=request.headers['CONTRACT-ID']
-                    )
+                    "access_list": response
                 },
                 status=status.HTTP_200_OK,
             )
@@ -138,6 +144,13 @@ class HederaAddViewSet(viewsets.ModelViewSet):
                 contract_id=request.headers['CONTRACT-ID'],
                 account_id=request.headers['ACCOUNT-ID']
             ):
+                access = FileAccess(
+                    contract_id=request.headers['CONTRACT-ID'],
+                    account_id=request.headers['ACCOUNT-ID']
+                )
+
+                access.save()
+            
                 return Response(
                     {
                         "success": TRUE,
@@ -163,6 +176,15 @@ class HederaRevokeViewSet(viewsets.ModelViewSet):
                 contract_id=request.headers['CONTRACT-ID'],
                 account_id=request.headers['ACCOUNT-ID']
             ):
+
+                access = FileAccess.objects.get(
+                    contract_id=request.headers['CONTRACT-ID'],
+                    account_id=request.headers['ACCOUNT-ID']
+                )
+
+                if access != None:
+                    access.delete()
+
                 return Response(
                     {
                         "success": TRUE,

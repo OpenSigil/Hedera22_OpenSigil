@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 
 from api.file.models import File
+from api.fileaccess.models import FileAccess
 
 class DbAddRecord(viewsets.ModelViewSet):
     http_method_names = ["post"]
@@ -50,6 +51,23 @@ class DbReturnRecord(viewsets.ModelViewSet):
                     "fileName": file.file_name,
                     "uploadedAt": file.updated_at,
                 })
+
+            # Get files granted access to
+
+            access_list = FileAccess.objects.filter(account_id=request.headers['ACCOUNT-ID'])
+
+            for access in access_list:
+                file = File.objects.filter(contract_id=access.contract_id)
+
+                if file != None:
+                    response.append({
+                        "cid": file.cid,
+                        "fileHash": file.file_hash,
+                        "contractId": file.contract_id,
+                        "fileSize": file.file_size,
+                        "fileName": file.file_name,
+                        "uploadedAt": file.updated_at,
+                    })
                 
             return Response(
                 {

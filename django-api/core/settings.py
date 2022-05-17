@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "api",
     "api.file",
+    "api.fileaccess",
 ]
 
 MIDDLEWARE = [
