@@ -140,6 +140,28 @@ class HederaAddViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         _hedera = HederaModel()
         if request.method == 'POST':
+            files = File.objects.filter(contract_id=request.headers['CONTRACT-ID'])
+
+            if len(files == 0):
+                return Response(
+                    {
+                        "success": FALSE,
+                        "msg": "Smart contract query failed!",
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+    
+            owner_account_id = files[0].owner_account_id
+
+            if owner_account_id != request.headers['ACCOUNT-ID']:
+                return Response(
+                    {
+                        "success": FALSE,
+                        "msg": "Smart contract query failed!",
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            
             if _hedera.add_access(
                 contract_id=request.headers['CONTRACT-ID'],
                 account_id=request.headers['ACCOUNT-ID']
@@ -172,6 +194,28 @@ class HederaRevokeViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         _hedera = HederaModel()
         if request.method == 'POST':
+            files = File.objects.filter(contract_id=request.headers['CONTRACT-ID'])
+
+            if len(files == 0):
+                return Response(
+                    {
+                        "success": FALSE,
+                        "msg": "Smart contract query failed!",
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+    
+            owner_account_id = files[0].owner_account_id
+
+            if owner_account_id != request.headers['ACCOUNT-ID']:
+                return Response(
+                    {
+                        "success": FALSE,
+                        "msg": "Smart contract query failed!",
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+                
             if _hedera.revoke_access(
                 contract_id=request.headers['CONTRACT-ID'],
                 account_id=request.headers['ACCOUNT-ID']
