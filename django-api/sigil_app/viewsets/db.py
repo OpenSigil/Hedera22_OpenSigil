@@ -58,9 +58,10 @@ class DbReturnRecord(viewsets.ModelViewSet):
                 access_list = FileAccess.objects.filter(account_id=request.headers['ACCOUNT-ID'])
 
                 for access in access_list:
-                    file = File.objects.filter(contract_id=access.contract_id)
+                    files = File.objects.filter(contract_id=access.contract_id)
 
-                    if file != None:
+                    if len(files) != 0:
+                        file = files[0]
                         response.append({
                             "cid": file.cid,
                             "fileHash": file.file_hash,
@@ -70,6 +71,7 @@ class DbReturnRecord(viewsets.ModelViewSet):
                             "uploadedAt": file.updated_at,
                         })
             except Exception as e:
+                print("test")
                 print(e)
                 
             return Response(
