@@ -250,7 +250,7 @@ export default function Dashboard() {
       isClosable: true
     });
     // get contract id here by searching db for filehash
-    await FilesApi.Decrypt(file, walletData.accountIds[0], contractId).then((response) => {
+    await FilesApi.Decrypt(file, walletData.accountIds[0]).then((response) => {
       toast({
         title: "File Decrypted!",
         status: "success",

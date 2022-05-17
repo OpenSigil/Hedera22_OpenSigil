@@ -224,7 +224,7 @@ class HederaModel():
 
         if type(input_file) == str:
             input_file = bytes(input_file, 'utf-8')
-        else:
+        elif callable(getattr(input_file, "read", None)):
             input_file = input_file.read()
 
         if account_id in account_list:

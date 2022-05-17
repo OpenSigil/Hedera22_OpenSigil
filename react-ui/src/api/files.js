@@ -40,14 +40,13 @@ class FilesApi {
     });
   };
 
-  static Decrypt = (file, accountId, contractId) => {
+  static Decrypt = (file, accountId) => {
     let form = new FormData();
     form.append("data", file);
     
     return axios.post(`${base}/hedera-decrypt`, form, {
       headers: {
-        "ACCOUNT-ID": accountId,
-        "CONTRACT-ID": contractId
+        "ACCOUNT-ID": accountId
       },
       responseType: "arraybuffer"
     });
@@ -88,6 +87,6 @@ class FilesApi {
   };
 }
 
-let base = "https://opensigil.com/api/sigil";
+let base = "sigil";
 
 export default FilesApi;

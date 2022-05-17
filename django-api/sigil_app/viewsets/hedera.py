@@ -7,6 +7,7 @@ from django.http import HttpResponse
 from sigil_app.models import HederaModel
 from api.file.models import File
 from datetime import datetime
+from sigil_app.models.encrypt import Encrypt
 
 class HederaEncryptViewSet(viewsets.ModelViewSet):
     http_method_names = ["post"]
@@ -55,11 +56,41 @@ class HederaDecryptViewSet(viewsets.ModelViewSet):
         try:
             _hedera = HederaModel()
             if request.method == 'POST':
+                
+                file_contents = request.FILES['data'].read()
+
+                # Get file hash
+                sigil_cryptography = Encrypt()
+                file_hash = sigil_cryptography.get_file_hash(file_contents)
+                
+                files = File.objects.filter(file_hash=file_hash)
+
+                if (len(files) == 0):
+                    return Response(
+                        {
+                            "success": FALSE,
+                            "msg": "File not found!",
+                        },
+                        status=status.HTTP_404_NOT_FOUND,
+                    )
+                
+                contract_id = files[0].contract_id
+
+                # use file hash to get contract id
                 decrypted_file =  _hedera.decrypt_file(
-                    account_id=request.headers['ACCOUNT-ID'],
-                    contract_id=request.headers['CONTRACT-ID'],
-                    input_file=request.FILES['data']
+                    account_id="0.0.34281540",
+                    contract_id=contract_id,
+                    input_file=file_contents
                 )
+
+                if decrypted_file == False:
+                    return Response(
+                        {
+                            "success": FALSE,
+                            "msg": "File upload failed!",
+                        },
+                        status=status.HTTP_401_UNAUTHORIZED,
+                    )
 
                 return HttpResponse(decrypted_file, content_type="application/octet-stream")
             return Response(
