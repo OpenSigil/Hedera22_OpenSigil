@@ -68,20 +68,22 @@ class FilesApi {
     });
   };
 
-  static AddAccess = (contractId, accountId) => {
+  static AddAccess = (contractId, ownerAccountId, targetAccountId) => {
     return axios.post(`${base}/add-access`, null, {
       headers: {
         "CONTRACT-ID": contractId,
-        "ACCOUNT-ID": accountId
+        "ACCOUNT-ID": ownerAccountId,
+        "TARGET-ACCOUNT-ID": targetAccountId
       }
     });
   };
 
-  static RevokeAccess = (contractId, accountId) => {
+  static RevokeAccess = (contractId, ownerAccountId, targetAccountId) => {
     return axios.post(`${base}/revoke-access`, null, {
       headers: {
         "CONTRACT-ID": contractId,
-        "ACCOUNT-ID": accountId
+        "ACCOUNT-ID": ownerAccountId,
+        "TARGET-ACCOUNT-ID": targetAccountId
       }
     });
   };

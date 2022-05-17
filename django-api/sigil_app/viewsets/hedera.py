@@ -161,14 +161,23 @@ class HederaAddViewSet(viewsets.ModelViewSet):
                     },
                     status=status.HTTP_400_BAD_REQUEST,
                 )
+                
+            if owner_account_id == request.headers['TARGET-ACCOUNT-ID']:
+                return Response(
+                    {
+                        "success": TRUE,
+                        "msg": "Smart contract query succeeded!",
+                    },
+                    status=status.HTTP_200_OK,
+                )
             
             if _hedera.add_access(
                 contract_id=request.headers['CONTRACT-ID'],
-                account_id=request.headers['ACCOUNT-ID']
+                account_id=request.headers['TARGET-ACCOUNT-ID']
             ):
                 access = FileAccess(
                     contract_id=request.headers['CONTRACT-ID'],
-                    account_id=request.headers['ACCOUNT-ID']
+                    account_id=request.headers['TARGET-ACCOUNT-ID']
                 )
 
                 access.save()
@@ -194,39 +203,45 @@ class HederaRevokeViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         _hedera = HederaModel()
         if request.method == 'POST':
-            try:
-                files = File.objects.filter(contract_id=request.headers['CONTRACT-ID'])
+            files = File.objects.filter(contract_id=request.headers['CONTRACT-ID'])
 
-                if len(files) == 0:
-                    return Response(
-                        {
-                            "success": FALSE,
-                            "msg": "Smart contract query failed!",
-                        },
-                        status=status.HTTP_400_BAD_REQUEST,
-                    )
-        
-                owner_account_id = files[0].owner_account_id
+            if len(files) == 0:
+                return Response(
+                    {
+                        "success": FALSE,
+                        "msg": "Smart contract query failed!",
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+    
+            owner_account_id = files[0].owner_account_id
 
-                if owner_account_id != request.headers['ACCOUNT-ID']:
-                    return Response(
-                        {
-                            "success": FALSE,
-                            "msg": "Smart contract query failed!",
-                        },
-                        status=status.HTTP_400_BAD_REQUEST,
-                    )
-            except Exception as e:
-                print(e)
+            if owner_account_id != request.headers['ACCOUNT-ID']:
+                return Response(
+                    {
+                        "success": FALSE,
+                        "msg": "Smart contract query failed!",
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            if owner_account_id == request.headers['TARGET-ACCOUNT-ID']:
+                return Response(
+                    {
+                        "success": TRUE,
+                        "msg": "Smart contract query succeeded!",
+                    },
+                    status=status.HTTP_200_OK,
+                )
 
             if _hedera.revoke_access(
                 contract_id=request.headers['CONTRACT-ID'],
-                account_id=request.headers['ACCOUNT-ID']
+                account_id=request.headers['TARGET-ACCOUNT-ID']
             ):
 
                 access = FileAccess.objects.get(
                     contract_id=request.headers['CONTRACT-ID'],
-                    account_id=request.headers['ACCOUNT-ID']
+                    account_id=request.headers['TARGET-ACCOUNT-ID']
                 )
 
                 if access != None:

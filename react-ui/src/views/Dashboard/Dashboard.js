@@ -323,7 +323,7 @@ export default function Dashboard() {
             <Button colorScheme='blue' mr={3} onClick={async () => {
               let error = false;
               if (addAccountId != "") {
-                await FilesApi.AddAccess(selectedFile.contractId, addAccountId).catch(() => {
+                await FilesApi.AddAccess(selectedFile.contractId, walletData.accountIds[0], addAccountId).catch(() => {
                   toast({
                     title: "Not authorized",
                     status: "error",
@@ -336,7 +336,7 @@ export default function Dashboard() {
               }
 
               if (revokeAccountId != "") {
-                await FilesApi.RevokeAccess(selectedFile.contractId, revokeAccountId).catch(() => {
+                await FilesApi.RevokeAccess(selectedFile.contractId, walletData.accountIds[0], revokeAccountId).catch(() => {
                   toast({
                     title: "Not authorized",
                     status: "error",
