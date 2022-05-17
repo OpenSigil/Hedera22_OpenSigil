@@ -78,7 +78,7 @@ class HederaDecryptViewSet(viewsets.ModelViewSet):
 
                 # use file hash to get contract id
                 decrypted_file =  _hedera.decrypt_file(
-                    account_id="0.0.34281540",
+                    account_id=request.headers['ACCOUNT-ID'],
                     contract_id=contract_id,
                     input_file=file_contents
                 )
