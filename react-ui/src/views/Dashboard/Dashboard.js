@@ -321,20 +321,41 @@ export default function Dashboard() {
 
           <ModalFooter>
             <Button colorScheme='blue' mr={3} onClick={async () => {
+              let error = false;
               if (addAccountId != "") {
-                await FilesApi.AddAccess(selectedFile.contractId, addAccountId);
+                await FilesApi.AddAccess(selectedFile.contractId, addAccountId).catch(() => {
+                  toast({
+                    title: "Not authorized",
+                    status: "error",
+                    duration: 2000,
+                    isClosable: true
+                  });
+
+                  error = true;
+                });
               }
 
               if (revokeAccountId != "") {
-                await FilesApi.RevokeAccess(selectedFile.contractId, revokeAccountId);
+                await FilesApi.RevokeAccess(selectedFile.contractId, revokeAccountId).catch(() => {
+                  toast({
+                    title: "Not authorized",
+                    status: "error",
+                    duration: 2000,
+                    isClosable: true
+                  });
+                  
+                  error = true;
+                });
               }
 
-              toast({
-                title: "Updated Access",
-                status: "success",
-                duration: 2000,
-                isClosable: true
-              });
+              if (!error) {
+                toast({
+                  title: "Updated Access",
+                  status: "success",
+                  duration: 2000,
+                  isClosable: true
+                });
+              }
 
               setSelectedFile(null);
 
