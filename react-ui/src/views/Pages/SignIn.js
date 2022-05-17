@@ -4,12 +4,31 @@ import {
   Box,
   Flex,
   Button,
-  Text
+  Text,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionIcon,
+  AccordionPanel
 } from "@chakra-ui/react";
 // Assets
-import signInImage from "assets/img/signInImage.png";
 import { useHistory } from "react-router-dom";
 import { useHashConnect } from "../../auth-context/HashConnectProvider";
+
+const FAQ_CATEGORIES = [
+  {
+    title: "How is OpenSigil different than other file hosting sites?",
+    contents: "Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passage is attributed to an unknown typesetter in the 15th century who is thought to have scrambled parts of Cicero's De Finibus Bonorum et Malorum for use in a type specimen book. "
+  },
+  {
+    title: "Who can use OpenSigil?",
+    contents: "Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passage is attributed to an unknown typesetter in the 15th century who is thought to have scrambled parts of Cicero's De Finibus Bonorum et Malorum for use in a type specimen book. "
+  },
+  {
+    title: "How do I use OpenSigil?",
+    contents: "Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passage is attributed to an unknown typesetter in the 15th century who is thought to have scrambled parts of Cicero's De Finibus Bonorum et Malorum for use in a type specimen book. "
+  }
+];
 
 function SignIn() {
   // HashConnect things
@@ -82,15 +101,40 @@ function SignIn() {
           position="absolute"
           right="0px"
         >
-          <Box
-            bgImage={signInImage}
-            w="100%"
-            h="100%"
-            bgSize="cover"
-            bgPosition="50%"
-            position="absolute"
-            borderBottomLeftRadius="20px"
-          ></Box>
+          <Flex
+            marginTop="200px"
+            flexDirection={"column"}
+          >
+            <Text
+              fontSize="3xl"
+            >
+              Frequently Asked Questions
+            </Text>
+            <Accordion
+              allowMultiple
+              allowToggle
+            >
+              {FAQ_CATEGORIES.map(category => 
+                <AccordionItem
+                  width="80%"
+                  marginTop={"15px"}
+                >
+                  <h2>
+                    <AccordionButton>
+                      <AccordionIcon />
+                      <Box>
+                        {category.title}
+                      </Box>
+                    </AccordionButton>
+                  </h2>
+
+                  <AccordionPanel>
+                    {category.contents}
+                  </AccordionPanel>
+                </AccordionItem>
+              )}
+            </Accordion>
+          </Flex>
         </Box>
       </Flex>
     </Flex>
